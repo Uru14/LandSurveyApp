@@ -1,0 +1,26 @@
+<div class="container">
+  <div class="counter">
+    <p>Predios Medidos: {{ prediosMedidos }}</p>
+  </div>
+  <button mat-raised-button (click)="mostrarPantallaNuevoPredio()">Nuevo Predio</button>
+  <button mat-raised-button >Editar Predio desde el Mapa</button>
+  <button mat-raised-button >Editar Predio desde Lista</button>
+  <button mat-raised-button >Enviar al Servidor</button>
+  <button mat-raised-button >Avanzado</button>
+
+  @if (mostrarNuevoPredio) {
+
+    <div>
+      <h1>Añadir Predio</h1>
+      <button mat-raised-button>Datos de Propietarios</button>
+      <button mat-raised-button>Datos del Predio</button>
+      <button mat-raised-button>Imágenes</button>
+      <button mat-raised-button>Documentos</button>
+      <button mat-raised-button>Borrar Geometría</button>
+      <button mat-raised-button>Seleccionar Geometría</button>
+      <button mat-raised-button>Comenzar a Medir con el GPS</button>
+      <button mat-raised-button>Digitalizar en el Mapa</button>
+      <button mat-raised-button>Atrás</button>
+    </div>
+  }
+</div>
