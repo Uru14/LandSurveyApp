@@ -7,9 +7,5 @@ import { Component } from '@angular/core';
 })
 export class MainScreenComponent {
   prediosMedidos = 0;
-  mostrarNuevoPredio = false; // Variable para controlar si se muestra o no la pantalla de añadir nuevo predio
 
-  mostrarPantallaNuevoPredio() {
-    this.mostrarNuevoPredio = true;
-  }
 }
