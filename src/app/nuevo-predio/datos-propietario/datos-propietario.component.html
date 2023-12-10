@@ -1,0 +1,14 @@
+<div class="container">
+  <h1>Añadir/Editar propietarios</h1>
+  <p>Propietarios actuales.
+  Click sobre el propietario para editarlo
+  </p>
+  <div class="listaPropietarios">
+    @for (propietario of propietarios; track propietario.dni) {
+      <div class="propietario">{{propietario.dni}}</div>
+    }
+  </div>
+
+  <button mat-raised-button routerLink='add-propietario'>Añadir propietario</button>
+  <button mat-raised-button routerLink=''>Atrás</button>
+</div>

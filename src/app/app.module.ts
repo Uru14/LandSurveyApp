@@ -8,6 +8,7 @@ import {NuevoPredioComponent} from "./nuevo-predio/nuevo-predio.component";
 import {DigitalizarComponent} from "./nuevo-predio/digitalizar/digitalizar.component";
 import {MapaComponent} from "./mapa/mapa.component";
 import {MatMenuModule} from "@angular/material/menu";
+import {PropietarioService} from "./services/PropietarioService";
 
 @NgModule({
   declarations: [
@@ -23,7 +24,7 @@ import {MatMenuModule} from "@angular/material/menu";
         MatMenuModule,
         BrowserAnimationsModule
     ],
-  providers: [],
+  providers: [PropietarioService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

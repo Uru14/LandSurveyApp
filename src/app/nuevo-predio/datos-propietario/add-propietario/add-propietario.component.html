@@ -1,0 +1,38 @@
+<div class="container">
+  <h1>Añadir/Editar propietario</h1>
+  <p>Tipo de documento</p>
+
+  <form>
+    <mat-form-field>
+      <input matInput placeholder="Nombre" [(ngModel)]="nombre" name="nombre" required>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput placeholder="Apellidos" [(ngModel)]="apellidos" name="apellidos" required>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput placeholder="DNI" [(ngModel)]="dni" name="dni" pattern="[0-9]{8}[a-zA-Z]" required>
+      <!--<mat-error>
+        @if(form.controls[dni].hasError(pattern)) {"El DNI debe tener 8 números seguidos por 1 letra}
+      </mat-error>-->
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput type="number" placeholder="% Propiedad" [(ngModel)]="porcentajePropiedad" name="porcentajePropiedad" min="1" max="100" required>
+    </mat-form-field>
+
+    <mat-radio-group [(ngModel)]="estado" name="estado" required>
+      <mat-radio-button value="soltero">Soltero</mat-radio-button>
+      <mat-radio-button value="casado">Casado</mat-radio-button>
+    </mat-radio-group>
+
+    <mat-form-field>
+      <textarea matInput placeholder="Notas" [(ngModel)]="notas" name="notas"></textarea>
+    </mat-form-field>
+  </form>
+
+  <button mat-raised-button (click)="guardarPropietario()">Guardar</button>
+  <button mat-raised-button (click)="eliminarPropietario()">Eliminar</button>
+  <button mat-raised-button routerLink='../'>Atrás</button>
+</div>
