@@ -5,10 +5,10 @@
   </p>
   <div class="listaPropietarios">
     @for (propietario of propietarios; track propietario.dni) {
-      <div class="propietario">{{propietario.dni}}</div>
+      <div class="propietario" (click)="editarPropietario(propietario.dni)">{{propietario.dni}}</div>
     }
   </div>
 
   <button mat-raised-button routerLink='add-propietario'>Añadir propietario</button>
-  <button mat-raised-button routerLink=''>Atrás</button>
+  <button mat-raised-button routerLink='../'>Atrás</button>
 </div>

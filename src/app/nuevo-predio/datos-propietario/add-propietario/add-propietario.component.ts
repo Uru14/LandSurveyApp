@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {RouterLink} from "@angular/router";
+import {Router, RouterLink} from "@angular/router";
 import {MatInputModule} from "@angular/material/input";
 import {FormsModule} from "@angular/forms";
 import {MatCheckboxModule} from "@angular/material/checkbox";
@@ -28,7 +28,7 @@ export class AddPropietarioComponent {
   estado: Estado;
   notas: string;
   propietario?: Propietario;
-  constructor(private propietarioService: PropietarioService) {
+  constructor(private propietarioService: PropietarioService, private router: Router) {
     this.nombre = '';
     this.apellidos = '';
     this.dni = '';
@@ -46,12 +46,17 @@ export class AddPropietarioComponent {
       this.porcentajePropiedad,
       this.estado
     )
+    if (!this.propietarioService.dniExists(this.propietario.dni)) {
     this.propietarioService.addPropietario(this.propietario)
+    this.router.navigate(['/nuevo-predio/datos-propietario'])
+    } else {
+      alert('DNI DUPLICADO')}
   }
 
   eliminarPropietario() {
     if (this.propietario) {
       this.propietarioService.eliminarPropietario(this.propietario.dni);
+      this.router.navigate(['/nuevo-predio/datos-propietario'])
     }
   }
 }

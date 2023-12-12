@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {RouterLink} from "@angular/router";
+import {RouterLink, Router} from "@angular/router";
 import {PropietarioService} from "../../services/PropietarioService";
 import {Propietario} from "../../models/propietario.model";
 
@@ -15,9 +15,12 @@ import {Propietario} from "../../models/propietario.model";
 export class DatosPropietarioComponent {
 
   propietarios: Propietario[];
-  constructor(private propietarioService: PropietarioService) {
+  constructor(private propietarioService: PropietarioService, private router: Router) {
     this.propietarios = this.propietarioService.getPropietarios();
   }
 
 
+  editarPropietario(dni: string) {
+    this.router.navigate(['/nuevo-predio/datos-propietario/editar-propietario', dni])
+  }
 }

@@ -25,7 +25,23 @@ export class PropietarioService {
   }
 
 
+  getPropietarioPorDni(dni: string): Propietario | undefined {
+    return this.propietarios.find(propietario => propietario.dni === dni);
+  }
+
+  actualizarPropietario(propietario: Propietario) {
+    let index = this.propietarios.findIndex(p => p.dni === propietario.dni);
+
+    if (index !== -1) {
+      this.propietarios[index] = propietario;
+      this.guardarPropietarios();
+    }
+  }
   guardarPropietarios() {
     localStorage.setItem('propietarios', JSON.stringify(this.propietarios));
+  }
+
+  dniExists(dni: string): boolean {
+    return this.propietarios.some(propietario => propietario.dni === dni);
   }
 }
