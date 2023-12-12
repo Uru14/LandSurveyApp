@@ -1,0 +1,30 @@
+<div class="container">
+  <h1>Datos del predio</h1>
+
+  <form>
+    <mat-form-field>
+      <input matInput placeholder="Cédula" [(ngModel)]="cedula" name="cedula" required>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput placeholder="Municipio" [(ngModel)]="municipio" name="municipio" required>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput placeholder="Vereda" [(ngModel)]="vereda" name="vereda" required>
+    </mat-form-field>
+
+    <mat-form-field>
+      <textarea matInput placeholder="Como se accede al predio" [(ngModel)]="acceso" name="acceso"></textarea>
+    </mat-form-field>
+
+    <mat-radio-group [(ngModel)]="cultivable" name="cultivable" required>
+      <mat-radio-button value="true">Lo cultiva</mat-radio-button>
+      <mat-radio-button value="false">No lo cultiva</mat-radio-button>
+    </mat-radio-group>
+
+  </form>
+
+  <button mat-raised-button (click)="guardarDatos()">Guardar</button>
+  <button mat-raised-button routerLink='../'>Atrás</button>
+</div>

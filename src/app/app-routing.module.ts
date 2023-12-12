@@ -6,10 +6,12 @@ import {DigitalizarComponent} from "./nuevo-predio/digitalizar/digitalizar.compo
 import {DatosPropietarioComponent} from "./nuevo-predio/datos-propietario/datos-propietario.component";
 import {AddPropietarioComponent} from "./nuevo-predio/datos-propietario/add-propietario/add-propietario.component";
 import {EditarPropietarioComponent} from "./nuevo-predio/datos-propietario/editar-propietario/editar-propietario.component";
+import {DatosPredioComponent} from "./nuevo-predio/datos-predio/datos-predio.component";
 
 const routes: Routes = [
   {path: '', component: MainScreenComponent, pathMatch: 'full'},
   { path: 'nuevo-predio', component: NuevoPredioComponent},
+  { path: 'nuevo-predio/datos-predio', component: DatosPredioComponent},
   { path: 'nuevo-predio/digitalizar', component: DigitalizarComponent },
   { path: 'nuevo-predio/datos-propietario', component: DatosPropietarioComponent },
   { path: 'nuevo-predio/datos-propietario/add-propietario', component: AddPropietarioComponent },
