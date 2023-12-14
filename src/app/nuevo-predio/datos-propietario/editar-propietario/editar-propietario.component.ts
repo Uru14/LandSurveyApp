@@ -6,6 +6,7 @@ import {MatRadioModule} from "@angular/material/radio";
 import {ActivatedRoute, Router, RouterLink} from "@angular/router";
 import {Estado, Propietario} from "../../../models/propietario.model";
 import {PropietarioService} from "../../../services/PropietarioService";
+import {PredioService} from "../../../services/PredioService";
 
 @Component({
   selector: 'app-editar-propietario',
@@ -29,7 +30,7 @@ export class EditarPropietarioComponent {
     estado: Estado.Casado,
     notas: ''
   };
-  constructor(private propietarioService: PropietarioService, private route: ActivatedRoute, private router: Router) {
+  constructor(private propietarioService: PropietarioService, private route: ActivatedRoute, private router: Router, private predioService: PredioService) {
 
   }
   ngOnInit() {
@@ -46,18 +47,32 @@ export class EditarPropietarioComponent {
   guardarPropietario() {
     if (this.propietario) {
       if (!this.propietarioService.dniExists(this.propietario.dni)) {
-      this.propietarioService.actualizarPropietario(this.propietario);
-      this.router.navigate(['/nuevo-predio/datos-propietario'])
-    } else {
-      alert('DNI DUPLICADO')}
+        this.propietarioService.actualizarPropietario(this.propietario);
+
+        // obtiene el predio actual y actualiza los propietarios
+        let predioActual = this.predioService.obtenerPredioActual();
+        predioActual.propietarios = this.propietarioService.getPropietarios();
+        this.predioService.guardarPredioActual(predioActual);
+
+        this.router.navigate(['/nuevo-predio/datos-propietario']);
+        console.log(predioActual);
+      } else {
+        alert('DNI DUPLICADO');
+      }
     }
   }
 
   eliminarPropietario() {
     if (this.propietario) {
       this.propietarioService.eliminarPropietario(this.propietario.dni);
-      this.router.navigate(['/nuevo-predio/datos-propietario'])
 
+      // obtiene el predio actual y actualiza los propietarios
+      let predioActual = this.predioService.obtenerPredioActual();
+      predioActual.propietarios = this.propietarioService.getPropietarios();
+      this.predioService.guardarPredioActual(predioActual);
+
+      this.router.navigate(['/nuevo-predio/datos-propietario']);
+      console.log(predioActual);
     }
   }
 }

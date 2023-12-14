@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import {RouterLink, Router} from "@angular/router";
 import {PropietarioService} from "../../services/PropietarioService";
 import {Propietario} from "../../models/propietario.model";
+import {PredioService} from "../../services/PredioService";
 
 @Component({
   selector: 'app-datos-propietario',
@@ -15,8 +16,9 @@ import {Propietario} from "../../models/propietario.model";
 export class DatosPropietarioComponent {
 
   propietarios: Propietario[];
-  constructor(private propietarioService: PropietarioService, private router: Router) {
-    this.propietarios = this.propietarioService.getPropietarios();
+  constructor(private propietarioService: PropietarioService, private router: Router, private predioService: PredioService) {
+    let predioActual = this.predioService.obtenerPredioActual();
+    this.propietarios = predioActual.propietarios || [];
   }
 
 

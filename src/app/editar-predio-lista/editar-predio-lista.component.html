@@ -1,0 +1,14 @@
+<div class="container">
+  <h1>Editar Predio desde Lista</h1>
+  <div class="listaPredios">
+    @for (predio of predios; track predio.id) {
+      <!--<div class="predios" (click)="editarPredio(predio.id)">
+        {{ predio.id }}
+      </div>-->
+      <div class="predios">
+        {{ predio.id }}
+      </div>
+    }
+
+  </div>
+</div>

@@ -2,11 +2,12 @@
   <div class="counter">
     <p>Predios Medidos: {{ prediosMedidos }}</p>
   </div>
-  <button mat-raised-button routerLink="/nuevo-predio">Nuevo Predio</button>
+  <button mat-raised-button (click)="nuevoPredio()" routerLink="/nuevo-predio">Nuevo Predio</button>
   <button mat-raised-button >Editar Predio desde el Mapa</button>
-  <button mat-raised-button >Editar Predio desde Lista</button>
+  <button mat-raised-button routerLink="/editar-predio-lista">Editar Predio desde Lista</button>
   <button mat-raised-button >Enviar al Servidor</button>
   <button mat-raised-button >Avanzado</button>
+  <button mat-raised-button (click)="borrarTodo()">Borrar Todo</button>
 
 
 </div>

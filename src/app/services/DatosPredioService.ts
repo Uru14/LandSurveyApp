@@ -4,33 +4,30 @@ import { DatosPredio } from '../models/datosPredio.model';
 @Injectable({
   providedIn: 'root',
 })
-
 export class DatosPredioService {
-  private datosPredio: DatosPredio[] = [];
+  private datosPredio: DatosPredio | null = null;
 
   constructor() {
+    this.cargarDatosPredio();
+  }
+
+  cargarDatosPredio() {
     let datosPredioAlmacenados = localStorage.getItem('datos');
-    this.datosPredio = datosPredioAlmacenados ? JSON.parse(datosPredioAlmacenados): [];
+    this.datosPredio = datosPredioAlmacenados ? JSON.parse(datosPredioAlmacenados) : null;
   }
 
   addDatosPredio(datos: DatosPredio) {
-    let index = this.datosPredio.findIndex(d => d.cedula === datos.cedula);
-    if (index !== -1) {
-      // Ya existe un conjunto de datos con la misma cédula, actualiza los datos existentes
-      this.datosPredio[index] = datos;
-    } else {
-      // No hay datos con la misma cédula, agrega uno nuevo
-      this.datosPredio.push(datos);
-    }
-
+    this.datosPredio = datos;
     this.guardarDatosPredio();
   }
+
   guardarDatosPredio() {
-    localStorage.setItem('datos', JSON.stringify(this.datosPredio));
+    if (this.datosPredio) {
+      localStorage.setItem('datos', JSON.stringify(this.datosPredio));
+    }
   }
 
-  getDatosPredio(): DatosPredio[] {
+  getDatosPredio(): DatosPredio | null {
     return this.datosPredio;
   }
-
 }

@@ -6,6 +6,7 @@ import {MatRadioModule} from "@angular/material/radio";
 import {RouterLink} from "@angular/router";
 import {DatosPredio} from "../../models/datosPredio.model";
 import {DatosPredioService} from "../../services/DatosPredioService";
+import {PredioService} from "../../services/PredioService";
 
 @Component({
   selector: 'app-datos-predio',
@@ -28,7 +29,7 @@ export class DatosPredioComponent {
   cultivable: boolean;
   datosPredio?: DatosPredio;
 
-  constructor(private datosPredioService: DatosPredioService) {
+  constructor(private datosPredioService: DatosPredioService, private predioService: PredioService) {
     this.cedula = "";
     this.municipio = "";
     this.vereda = "";
@@ -44,8 +45,14 @@ export class DatosPredioComponent {
       this.acceso,
       this.cultivable
     )
-    this.datosPredioService.addDatosPredio(this.datosPredio)
+    let predioActual = this.predioService.obtenerPredioActual();
+    console.log(predioActual);
+    predioActual.datosPredio = this.datosPredio;
+    //this.predioService.guardarPredioActual(predioActual);
+
+    this.datosPredioService.addDatosPredio(this.datosPredio);
     console.log(this.datosPredioService.getDatosPredio());
+    console.log(predioActual);
   }
 
 

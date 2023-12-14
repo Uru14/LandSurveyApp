@@ -7,9 +7,11 @@ import {DatosPropietarioComponent} from "./nuevo-predio/datos-propietario/datos-
 import {AddPropietarioComponent} from "./nuevo-predio/datos-propietario/add-propietario/add-propietario.component";
 import {EditarPropietarioComponent} from "./nuevo-predio/datos-propietario/editar-propietario/editar-propietario.component";
 import {DatosPredioComponent} from "./nuevo-predio/datos-predio/datos-predio.component";
+import {EditarPredioListaComponent} from "./editar-predio-lista/editar-predio-lista.component";
 
 const routes: Routes = [
   {path: '', component: MainScreenComponent, pathMatch: 'full'},
+  { path: 'editar-predio-lista', component: EditarPredioListaComponent },
   { path: 'nuevo-predio', component: NuevoPredioComponent},
   { path: 'nuevo-predio/datos-predio', component: DatosPredioComponent},
   { path: 'nuevo-predio/digitalizar', component: DigitalizarComponent },

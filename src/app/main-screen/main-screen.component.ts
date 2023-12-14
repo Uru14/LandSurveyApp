@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import {Component, signal} from '@angular/core';
+import {PredioService} from "../services/PredioService";
 
 @Component({
   selector: 'app-main-screen',
@@ -8,4 +9,18 @@ import { Component } from '@angular/core';
 export class MainScreenComponent {
   prediosMedidos = 0;
 
+  constructor(private predioService: PredioService) {}
+
+  nuevoPredio() {
+    this.predioService.nuevoPredio();
+  }
+  ngOnInit() {
+    this.prediosMedidos = this.predioService.getListaPredios().length;
+
+  }
+
+  borrarTodo() {
+    localStorage.clear();
+
+  }
 }
