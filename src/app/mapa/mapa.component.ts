@@ -12,6 +12,10 @@ import LayerSwitcher from 'ol-layerswitcher';
 import Map from 'ol/Map';
 import OSM from 'ol/source/OSM.js';
 import {mapDraw} from  "./mapDraw";
+import VectorLayer from "ol/layer/Vector";
+import VectorSource from "ol/source/Vector";
+import Feature from "ol/Feature.js";
+import Polygon from "ol/geom/Polygon.js";
 @Component({
   selector: 'app-mapa',
   templateUrl: './mapa.component.html',
@@ -82,7 +86,8 @@ export class MapaComponent implements OnInit {
       tipLabel: 'Leyenda'
     });
 
-    //CONFIG_OPENLAYERS.MAP.addControl(layerSwitcher);
+    CONFIG_OPENLAYERS.MAP.addControl(layerSwitcher);
+
   }
 
 

@@ -9,22 +9,28 @@ import {DigitalizarComponent} from "./nuevo-predio/digitalizar/digitalizar.compo
 import {MapaComponent} from "./mapa/mapa.component";
 import {MatMenuModule} from "@angular/material/menu";
 import {PropietarioService} from "./services/PropietarioService";
+import {EditarPredioComponent} from "./editar-predio/editar-predio.component";
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    MainScreenComponent,
-    NuevoPredioComponent,
-    DigitalizarComponent,
-    MapaComponent
-  ],
+    declarations: [
+        AppComponent,
+        MainScreenComponent,
+        NuevoPredioComponent,
+        DigitalizarComponent,
+        MapaComponent,
+        EditarPredioComponent,
+    ],
     imports: [
         BrowserModule,
         AppRoutingModule,
         MatMenuModule,
-        BrowserAnimationsModule
+        BrowserAnimationsModule,
+
     ],
-  providers: [PropietarioService],
-  bootstrap: [AppComponent]
+    providers: [PropietarioService],
+    exports: [
+        MapaComponent
+    ],
+    bootstrap: [AppComponent]
 })
 export class AppModule { }

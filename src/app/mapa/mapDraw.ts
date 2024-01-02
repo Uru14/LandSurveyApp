@@ -1,5 +1,13 @@
 import {CONFIG_OPENLAYERS} from "../configuracion-openlayers";
 import Draw from "ol/interaction/Draw";
+import VectorLayer from "ol/layer/Vector";
+import VectorSource from "ol/source/Vector";
+import Feature from "ol/Feature.js";
+import Polygon from "ol/geom/Polygon.js";
+import {Modify, Select} from 'ol/interaction.js';
+import {click} from 'ol/events/condition.js';
+import {PredioService} from "../services/PredioService";
+import {GeometriasService} from "../services/GeometriasService";
 
 
 export class mapDraw {
@@ -28,8 +36,8 @@ export class mapDraw {
 
 //Enables the polygons draw
   public static enableDrawPolygons(){
-    this.disableDrawings();
-    CONFIG_OPENLAYERS.MAP_DRAW_POLYGON.setActive(true);
+      this.disableDrawings();
+      CONFIG_OPENLAYERS.MAP_DRAW_POLYGON.setActive(true);
   }
 
   //Enables the points draw
@@ -54,5 +62,22 @@ export class mapDraw {
   public static clearVectorLayer(){
     CONFIG_OPENLAYERS.SOURCE_DRAW.clear();
   }
+
+  // Add a polygon to the vector layer
+  public static addPolygonToLayer(coordinates: number[][]) {
+    console.log("las coordenadas que entran a la función addPolygonToLayer son:")
+    console.log(coordinates)
+
+    // Crea la geometría del polígono
+    let polygonGeometry = new Polygon([coordinates]);
+
+    // Crea la feature del polígono
+    let polygonFeature = new Feature({
+      geometry: polygonGeometry,
+    });
+
+    CONFIG_OPENLAYERS.SOURCE_DRAW.addFeature(polygonFeature);
+  }
+
 
 }

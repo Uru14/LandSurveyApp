@@ -1,24 +1,24 @@
 import { Injectable } from '@angular/core';
 import { Propietario } from '../models/propietario.model';
+import { Storage } from '@capacitor/storage';
 
 @Injectable({
   providedIn: 'root',
 })
 export class PropietarioService {
   private propietarios: Propietario[] = [];
-
+  private readonly STORAGE_KEY = 'propietarios';
   constructor() {
-    let propietariosAlmacenados = localStorage.getItem('propietarios');
-    this.propietarios = propietariosAlmacenados ? JSON.parse(propietariosAlmacenados) : [];
+    this.cargarPropietarios();
   }
-  addPropietario(propietario: Propietario) {
+  async addPropietario(propietario: Propietario) {
     this.propietarios.push(propietario);
-    this.guardarPropietarios();
+    await this.guardarPropietarios();
   }
 
-  eliminarPropietario(dni: string) {
-    this.propietarios = this.propietarios.filter(propietario => propietario.dni !== dni);
-    this.guardarPropietarios();
+  async eliminarPropietario(dni: string) {
+    this.propietarios = this.propietarios.filter((propietario) => propietario.dni !== dni);
+    await this.guardarPropietarios();
   }
   getPropietarios(): Propietario[] {
     return this.propietarios;
@@ -29,16 +29,25 @@ export class PropietarioService {
     return this.propietarios.find(propietario => propietario.dni === dni);
   }
 
-  actualizarPropietario(propietario: Propietario) {
-    let index = this.propietarios.findIndex(p => p.dni === propietario.dni);
+  async actualizarPropietario(propietario: Propietario) {
+    let index = this.propietarios.findIndex((p) => p.dni === propietario.dni);
 
     if (index !== -1) {
       this.propietarios[index] = propietario;
-      this.guardarPropietarios();
+      await this.guardarPropietarios();
     }
   }
-  guardarPropietarios() {
-    localStorage.setItem('propietarios', JSON.stringify(this.propietarios));
+
+  private async cargarPropietarios() {
+    let propietariosAlmacenados = await Storage.get({ key: this.STORAGE_KEY });
+    this.propietarios = propietariosAlmacenados && propietariosAlmacenados.value
+      ? JSON.parse(propietariosAlmacenados.value) : [];
+  }
+  private async guardarPropietarios() {
+    await Storage.set({
+      key: this.STORAGE_KEY,
+      value: JSON.stringify(this.propietarios),
+    });
   }
 
   dniExists(dni: string): boolean {

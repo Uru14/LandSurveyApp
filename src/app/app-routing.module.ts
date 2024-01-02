@@ -8,16 +8,21 @@ import {AddPropietarioComponent} from "./nuevo-predio/datos-propietario/add-prop
 import {EditarPropietarioComponent} from "./nuevo-predio/datos-propietario/editar-propietario/editar-propietario.component";
 import {DatosPredioComponent} from "./nuevo-predio/datos-predio/datos-predio.component";
 import {EditarPredioListaComponent} from "./editar-predio-lista/editar-predio-lista.component";
+import {EditarPredioComponent} from "./editar-predio/editar-predio.component";
+import {EditarDatosPredioComponent} from "./editar-predio/editar-datos-predio/editar-datos-predio.component";
 
 const routes: Routes = [
   {path: '', component: MainScreenComponent, pathMatch: 'full'},
   { path: 'editar-predio-lista', component: EditarPredioListaComponent },
-  { path: 'nuevo-predio', component: NuevoPredioComponent},
-  { path: 'nuevo-predio/datos-predio', component: DatosPredioComponent},
-  { path: 'nuevo-predio/digitalizar', component: DigitalizarComponent },
-  { path: 'nuevo-predio/datos-propietario', component: DatosPropietarioComponent },
-  { path: 'nuevo-predio/datos-propietario/add-propietario', component: AddPropietarioComponent },
-  { path: 'nuevo-predio/datos-propietario/editar-propietario/:dni', component: EditarPropietarioComponent },
+  { path: 'editar-predio/:id', component: EditarPredioComponent },
+  { path: 'editar-predio/:id/editar-datos-predio', component: EditarDatosPredioComponent },
+  { path: 'editar-datos-predio/:id', component: EditarDatosPredioComponent },
+  { path: 'nuevo-predio/:id', component: NuevoPredioComponent},
+  { path: 'nuevo-predio/:id/datos-predio', component: DatosPredioComponent},
+  { path: 'nuevo-predio/:id/digitalizar', component: DigitalizarComponent },
+  { path: 'nuevo-predio/:id/datos-propietario', component: DatosPropietarioComponent},
+  { path: 'nuevo-predio/:id/datos-propietario/add-propietario', component: AddPropietarioComponent },
+  { path: 'nuevo-predio/:id/datos-propietario/editar-propietario/:dni', component: EditarPropietarioComponent },
 ];
 
 @NgModule({

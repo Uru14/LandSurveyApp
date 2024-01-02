@@ -1,4 +1,9 @@
 import {TipoDocumento} from "./imagen.model";
+export enum DocTypeEnum {
+  DNI = 'DNI',
+  Escritura = 'Escritura',
+  Declaracion = 'Declaración',
+}
 export class Documento {
   tipo_doc: TipoDocumento
   notas: string

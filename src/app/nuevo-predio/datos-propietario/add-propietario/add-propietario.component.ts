@@ -39,6 +39,7 @@ export class AddPropietarioComponent {
   }
 
   guardarPropietario() {
+    console.log(this.propietarioService.getPropietarios());
     this.propietario = new Propietario(
       this.nombre,
       this.apellidos,
@@ -48,6 +49,11 @@ export class AddPropietarioComponent {
       this.estado
     )
     if (!this.propietarioService.dniExists(this.propietario.dni)) {
+
+      // Añade el propietario al servicio PropietarioService
+      this.propietarioService.addPropietario(this.propietario);
+
+      //let predioActual = this.predioService.obtenerPredioActual();
       let predioActual = this.predioService.obtenerPredioActual();
       // Añade el propietario al predio actual
       if (!predioActual.propietarios) {
@@ -55,13 +61,9 @@ export class AddPropietarioComponent {
       }
       predioActual.propietarios.push(this.propietario);
 
-      // Guarda el predio actual con el nuevo propietario
-      //this.predioService.guardarPredioActual(predioActual);
 
-      // Añade el propietario al servicio PropietarioService
-      this.propietarioService.addPropietario(this.propietario);
 
-      this.router.navigate(['/nuevo-predio/datos-propietario'])
+      this.router.navigate(['/nuevo-predio/' , predioActual.id, 'datos-propietario'])
       console.log(predioActual);
     } else {
       alert('DNI DUPLICADO')}
@@ -76,7 +78,7 @@ export class AddPropietarioComponent {
       predioActual.propietarios = this.propietarioService.getPropietarios();
       //this.predioService.guardarPredioActual(predioActual);
 
-      this.router.navigate(['/nuevo-predio/datos-propietario'])
+      this.router.navigate(['/nuevo-predio/:id/datos-propietario'])
       console.log(predioActual);
     }
   }

@@ -8,14 +8,17 @@ import {Router} from "@angular/router";
 })
 export class NuevoPredioComponent {
 
-  constructor(private predioService: PredioService, private router: Router) {}
+  constructor(private predioService: PredioService) {}
 
   guardarPredio() {
+
     // Obtén el predio actual desde el servicio
     let predioActual = this.predioService.obtenerPredioActual();
-
+    console.log(predioActual)
     // Guarda el predio actual
     this.predioService.guardarPredioActual(predioActual);
+
+    console.log(predioActual)
 
   }
 }

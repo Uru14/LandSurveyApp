@@ -5,10 +5,13 @@
       <!--<div class="predios" (click)="editarPredio(predio.id)">
         {{ predio.id }}
       </div>-->
-      <div class="predios">
+      <div class="predios" (click)="editarPredio(predio.id)">
         {{ predio.id }}
       </div>
     }
 
+  </div>
+  <div id="botones">
+    <button class="mainBtn" routerLink="../">Atrás</button>
   </div>
 </div>

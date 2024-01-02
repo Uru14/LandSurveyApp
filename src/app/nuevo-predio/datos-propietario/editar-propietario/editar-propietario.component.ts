@@ -37,7 +37,7 @@ export class EditarPropietarioComponent {
     this.route.paramMap.subscribe(params => {
       const dni = params.get('dni');
       if (dni) {
-        const propietarioEncontrado = this.propietarioService.getPropietarioPorDni(dni);
+        let propietarioEncontrado = this.propietarioService.getPropietarioPorDni(dni);
         if (propietarioEncontrado) {
           this.propietario = propietarioEncontrado;
         }
@@ -52,10 +52,10 @@ export class EditarPropietarioComponent {
         // obtiene el predio actual y actualiza los propietarios
         let predioActual = this.predioService.obtenerPredioActual();
         predioActual.propietarios = this.propietarioService.getPropietarios();
-        this.predioService.guardarPredioActual(predioActual);
+
 
         this.router.navigate(['/nuevo-predio/datos-propietario']);
-        console.log(predioActual);
+
       } else {
         alert('DNI DUPLICADO');
       }
