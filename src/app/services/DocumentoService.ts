@@ -1,18 +1,33 @@
 import { Injectable } from '@angular/core';
 import { Storage } from '@capacitor/storage';
 import {Documento} from "../models/documento.model";
-import {TipoDocumento} from "../models/imagen.model";
-
 @Injectable({
   providedIn: 'root',
 })
 export class DocumentoService {
+  private readonly STORAGE_KEY = 'listaDocumentos';
   private documentos: Documento[] = [];
 
+  private async cargarListaDocumentosDesdeStorage() {
+    const listaDocumentosGuardada = await Storage.get({ key: this.STORAGE_KEY });
 
-  addDocumento(tipoDocumento: TipoDocumento, notas: string) {
-    const nuevoDocumento: Documento = { tipo_doc: tipoDocumento, notas: notas };
-    this.documentos.push(nuevoDocumento);
+    if (listaDocumentosGuardada && listaDocumentosGuardada.value) {
+      this.documentos = JSON.parse(listaDocumentosGuardada.value);
+    }
+  }
+
+  actualizarDocumento(index: number, documento: Documento) {
+    this.documentos[index] = documento;
+    this.guardarListaDocumentosEnStorage();
+  }
+  private async guardarListaDocumentosEnStorage() {
+    await Storage.set({
+      key: this.STORAGE_KEY,
+      value: JSON.stringify(this.documentos),
+    });
+  }
+  addDocumento(documento: Documento) {
+    this.documentos.push(documento);
   }
 
 

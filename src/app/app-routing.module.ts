@@ -10,6 +10,9 @@ import {DatosPredioComponent} from "./nuevo-predio/datos-predio/datos-predio.com
 import {EditarPredioListaComponent} from "./editar-predio-lista/editar-predio-lista.component";
 import {EditarPredioComponent} from "./editar-predio/editar-predio.component";
 import {EditarDatosPredioComponent} from "./editar-predio/editar-datos-predio/editar-datos-predio.component";
+import {DocumentosComponent} from "./nuevo-predio/documentos/documentos.component";
+import {AddDocumentoComponent} from "./nuevo-predio/documentos/add-documento/add-documento.component";
+import {EditarDocumentoComponent} from "./nuevo-predio/documentos/editar-documento/editar-documento.component";
 
 const routes: Routes = [
   {path: '', component: MainScreenComponent, pathMatch: 'full'},
@@ -20,6 +23,9 @@ const routes: Routes = [
   { path: 'nuevo-predio/:id', component: NuevoPredioComponent},
   { path: 'nuevo-predio/:id/datos-predio', component: DatosPredioComponent},
   { path: 'nuevo-predio/:id/digitalizar', component: DigitalizarComponent },
+  { path: 'nuevo-predio/:id/documentos', component: DocumentosComponent },
+  { path: 'nuevo-predio/:id/documentos/add-documento', component: AddDocumentoComponent },
+  { path: 'nuevo-predio/:id/documentos/editar-documento/:i', component: EditarDocumentoComponent },
   { path: 'nuevo-predio/:id/datos-propietario', component: DatosPropietarioComponent},
   { path: 'nuevo-predio/:id/datos-propietario/add-propietario', component: AddPropietarioComponent },
   { path: 'nuevo-predio/:id/datos-propietario/editar-propietario/:dni', component: EditarPropietarioComponent },

@@ -35,7 +35,7 @@ export class EditarPropietarioComponent {
   }
   ngOnInit() {
     this.route.paramMap.subscribe(params => {
-      const dni = params.get('dni');
+      let dni = params.get('dni');
       if (dni) {
         let propietarioEncontrado = this.propietarioService.getPropietarioPorDni(dni);
         if (propietarioEncontrado) {

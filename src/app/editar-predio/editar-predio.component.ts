@@ -140,6 +140,7 @@ export class EditarPredioComponent implements OnInit{
 
   borrar() {
     this.predioService.borrarPredioActual();
+    this.router.navigate(['/editar-predio-lista']);
   }
 
 }
