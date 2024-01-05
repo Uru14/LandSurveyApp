@@ -13,6 +13,8 @@ import {EditarDatosPredioComponent} from "./editar-predio/editar-datos-predio/ed
 import {DocumentosComponent} from "./nuevo-predio/documentos/documentos.component";
 import {AddDocumentoComponent} from "./nuevo-predio/documentos/add-documento/add-documento.component";
 import {EditarDocumentoComponent} from "./nuevo-predio/documentos/editar-documento/editar-documento.component";
+import {ImagenesComponent} from "./nuevo-predio/imagenes/imagenes.component";
+import {AddImagenComponent} from "./nuevo-predio/imagenes/add-imagen/add-imagen.component";
 
 const routes: Routes = [
   {path: '', component: MainScreenComponent, pathMatch: 'full'},
@@ -27,6 +29,8 @@ const routes: Routes = [
   { path: 'nuevo-predio/:id/documentos/add-documento', component: AddDocumentoComponent },
   { path: 'nuevo-predio/:id/documentos/editar-documento/:i', component: EditarDocumentoComponent },
   { path: 'nuevo-predio/:id/datos-propietario', component: DatosPropietarioComponent},
+  { path: 'nuevo-predio/:id/imagenes', component: ImagenesComponent},
+  { path: 'nuevo-predio/:id/imagenes/add-imagen', component: AddImagenComponent},
   { path: 'nuevo-predio/:id/datos-propietario/add-propietario', component: AddPropietarioComponent },
   { path: 'nuevo-predio/:id/datos-propietario/editar-propietario/:dni', component: EditarPropietarioComponent },
 ];

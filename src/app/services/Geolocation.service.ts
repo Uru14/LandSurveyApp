@@ -1,3 +1,4 @@
+/*
 import { Injectable } from '@angular/core';
 import { Geolocation } from '@capacitor/geolocation';
 @Injectable({
@@ -9,3 +10,4 @@ export class GeolocationService {
     return Geolocation.getCurrentPosition();
   }
 }
+*/
