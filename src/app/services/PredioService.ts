@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Predio } from '../models/predio.model';
 import {Coordenadas} from "../models/geometria.model";
-import { Storage } from '@capacitor/storage';
+import { Preferences } from '@capacitor/preferences';
 import {ActivatedRoute} from "@angular/router";
 @Injectable({
   providedIn: 'root',
@@ -12,7 +12,7 @@ export class PredioService {
   //private predioActual: Predio = new Predio(this.contadorIds,[], null, [], [], []);
   private predioActual: Predio = new Predio(0,[], null, [], [], []);
   private listaPredios: Predio[] = [];
-  private readonly STORAGE_KEY = 'listaPredios';
+  private readonly PREFERENCES_KEY = 'listaPredios';
   constructor(private route: ActivatedRoute) {
     this.cargarListaPredios();
   }
@@ -33,7 +33,15 @@ export class PredioService {
 
   guardarPredioActual(predio: Predio) {
     this.predioActual = predio;
-    this.listaPredios.push(predio);
+
+    // Actualiza la lista de predios con el predio actualizado
+    const index = this.listaPredios.findIndex(p => p.id === predio.id);
+    if (index !== -1) {
+      this.listaPredios[index] = predio;
+    } else {
+      this.listaPredios.push(predio);
+    }
+
     this.guardarListaPredios();
   }
 
@@ -42,15 +50,15 @@ export class PredioService {
   }
 
   private async cargarListaPredios() {
-    let listaPrediosGuardada = await Storage.get({ key: this.STORAGE_KEY });
+    let listaPrediosGuardada = await Preferences.get({ key: this.PREFERENCES_KEY });
     if (listaPrediosGuardada && listaPrediosGuardada.value) {
       this.listaPredios = JSON.parse(listaPrediosGuardada.value);
     }
   }
 
-  private async guardarListaPredios() {
-    await Storage.set({
-      key: this.STORAGE_KEY,
+  public async guardarListaPredios() {
+    await Preferences.set({
+      key: this.PREFERENCES_KEY,
       value: JSON.stringify(this.listaPredios),
     });
   }
@@ -66,10 +74,12 @@ export class PredioService {
       // Guarda la lista actualizada en el almacenamiento
       this.guardarListaPredios();
 
-      // Crea un nuevo predio actual
+      // Crea un nuevo predio
       this.nuevoPredio();
     } else {
       console.error('No se pudo encontrar el predio actual en la lista de predios.');
     }
   }
+
+
 }

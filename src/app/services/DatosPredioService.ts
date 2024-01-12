@@ -1,20 +1,20 @@
 import { Injectable } from '@angular/core';
 import { DatosPredio } from '../models/datosPredio.model';
-import { Storage } from '@capacitor/storage';
+import { Preferences } from '@capacitor/preferences';
 
 @Injectable({
   providedIn: 'root',
 })
 export class DatosPredioService {
   private datosPredio: DatosPredio | null = null;
-  private readonly STORAGE_KEY = 'datosPredio';
+  private readonly PREFERENCES_KEY = 'datosPredio';
 
   constructor() {
     this.cargarDatosPredio();
   }
 
   async cargarDatosPredio() {
-    let datosPredioAlmacenados = await Storage.get({ key: this.STORAGE_KEY });
+    let datosPredioAlmacenados = await Preferences.get({ key: this.PREFERENCES_KEY });
     this.datosPredio = datosPredioAlmacenados && datosPredioAlmacenados.value
       ? JSON.parse(datosPredioAlmacenados.value) : null;
   }
@@ -27,8 +27,8 @@ export class DatosPredioService {
 
   async guardarDatosPredio() {
     if (this.datosPredio) {
-      await Storage.set({
-        key: this.STORAGE_KEY,
+      await Preferences.set({
+        key: this.PREFERENCES_KEY,
         value: JSON.stringify(this.datosPredio),
       });
     }

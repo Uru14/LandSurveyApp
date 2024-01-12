@@ -23,8 +23,8 @@ export class DatosPropietarioComponent{
     this.propietarios = this.predioActual.propietarios;
   }
 
-  editarPropietario(dni: string) {
-    this.router.navigate(['/nuevo-predio/', this.predioActual.id, 'datos-propietario', 'editar-propietario', dni])
+  editarPropietario(documentoIdentidad: string) {
+    this.router.navigate(['/nuevo-predio/', this.predioActual.id, 'datos-propietario', 'editar-propietario', documentoIdentidad])
   }
 
 }

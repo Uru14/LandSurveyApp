@@ -1,15 +1,15 @@
 import { Injectable } from '@angular/core';
-import { Storage } from '@capacitor/storage';
+import { Preferences } from '@capacitor/preferences';
 import {Documento} from "../models/documento.model";
 @Injectable({
   providedIn: 'root',
 })
 export class DocumentoService {
-  private readonly STORAGE_KEY = 'listaDocumentos';
+  private readonly PREFERENCES_KEY = 'listaDocumentos';
   private documentos: Documento[] = [];
 
   private async cargarListaDocumentosDesdeStorage() {
-    const listaDocumentosGuardada = await Storage.get({ key: this.STORAGE_KEY });
+    const listaDocumentosGuardada = await Preferences.get({ key: this.PREFERENCES_KEY });
 
     if (listaDocumentosGuardada && listaDocumentosGuardada.value) {
       this.documentos = JSON.parse(listaDocumentosGuardada.value);
@@ -21,8 +21,8 @@ export class DocumentoService {
     this.guardarListaDocumentosEnStorage();
   }
   private async guardarListaDocumentosEnStorage() {
-    await Storage.set({
-      key: this.STORAGE_KEY,
+    await Preferences.set({
+      key: this.PREFERENCES_KEY,
       value: JSON.stringify(this.documentos),
     });
   }

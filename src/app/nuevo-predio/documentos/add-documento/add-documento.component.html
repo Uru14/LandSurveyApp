@@ -2,7 +2,7 @@
   <h1>Añadir documento</h1>
 
   <form>
-    <mat-form-field>
+    <mat-form-field class="custom-input">
       <mat-label>Tipo de documento:</mat-label>
       <mat-select [(ngModel)]="tipo_doc" name="tipo_doc">
         @for (tipo of array_tipo_doc; track tipo) {
@@ -11,13 +11,13 @@
       </mat-select>
     </mat-form-field>
 
-    <mat-form-field>
+    <mat-form-field class="custom-input">
       <textarea matInput placeholder="Notas" [(ngModel)]="notas" name="notas"></textarea>
     </mat-form-field>
   </form>
 
-  <button mat-raised-button (click)="guardarDocumento()">Guardar</button>
-  <button mat-raised-button >Eliminar</button>
+  <button mat-raised-button class="custom-button" (click)="guardarDocumento()">Guardar</button>
+  <button mat-raised-button class="custom-button" >Eliminar</button>
   <!--<button mat-raised-button (click)="eliminarDocumento()">Eliminar</button>-->
-  <button mat-raised-button routerLink='../'>Atrás</button>
+  <button mat-raised-button class="custom-button" routerLink='../'>Atrás</button>
 </div>

@@ -13,19 +13,24 @@
 
     <mat-form-field class="custom-input">
       <mat-label>Número de página:</mat-label>
-      <input matInput type="number" placeholder="num_pag" [(ngModel)]="num_pag" name="num_pag">
+      <input matInput type="number" placeholder="num_pag" [(ngModel)]="imagen.num_pag" name="num_pag">
     </mat-form-field>
     <mat-form-field class="custom-input">
-      <textarea matInput placeholder="Notas" [(ngModel)]="notas" name="notas"></textarea>
+      <textarea matInput placeholder="Notas" [(ngModel)]="imagen.notas" name="notas"></textarea>
     </mat-form-field>
   </form>
 
+  <button mat-raised-button class="custom-button" (click)="guardarImagen()">Guardar</button>
+
   @if (imagenCapturada) {
     <div>
+      <h3>Imagen actual: </h3>
       <img [src]="imagenCapturada" alt="Imagen Capturada" style="max-width: 100%;">
     </div>
   }
+
   <button mat-raised-button class="custom-button" (click)="takePhoto()">Tomar imagen</button>
-  <button mat-raised-button class="custom-button" (click)="guardarImagen()">Guardar</button>
-  <button mat-raised-button class="custom-button" routerLink='../'>Atrás</button>
+  <button mat-raised-button class="custom-button" (click)="eliminarImagen()">Eliminar</button>
+  <button mat-raised-button class="custom-button" routerLink='../../'>Atrás</button>
+
 </div>

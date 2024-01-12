@@ -1,12 +1,16 @@
 import { Component } from '@angular/core';
-import {Router, RouterLink} from "@angular/router";
-import {MatInputModule} from "@angular/material/input";
-import {FormsModule} from "@angular/forms";
-import {MatCheckboxModule} from "@angular/material/checkbox";
-import {Estado, Propietario} from "../../../models/propietario.model";
+import {Router, RouterLink} from '@angular/router';
+import { Propietario, CR_InteresadoTipo, CR_DocumentoTipo, CR_SexoTipo, Grupo_Etnico, Estado } from '../../../models/propietario.model';
+import { PropietarioService } from '../../../services/PropietarioService';
+import { PredioService } from '../../../services/PredioService';
 import {MatRadioModule} from "@angular/material/radio";
-import {PropietarioService} from "../../../services/PropietarioService";
-import {PredioService} from "../../../services/PredioService";
+import {MatCheckboxModule} from "@angular/material/checkbox";
+import {FormsModule} from "@angular/forms";
+import {MatInputModule} from "@angular/material/input";
+import {MatSelectModule} from "@angular/material/select";
+import {LC_FuenteAdministrativaTipo} from "../../../models/imagen.model";
+import { DataService } from '../../../services/DataService';
+import {Departamento, Municipio} from "../../../models/propietario.model";
 
 @Component({
   selector: 'app-add-propietario',
@@ -16,70 +20,107 @@ import {PredioService} from "../../../services/PredioService";
     MatInputModule,
     FormsModule,
     MatCheckboxModule,
-    MatRadioModule
+    MatRadioModule,
+    MatSelectModule
   ],
   templateUrl: './add-propietario.component.html',
   styleUrl: './add-propietario.component.css'
 })
 export class AddPropietarioComponent {
-  nombre: string;
-  apellidos: string;
-  dni: string;
-  porcentajePropiedad: number;
-  estado: Estado;
-  notas: string;
-  propietario?: Propietario;
-  constructor(private propietarioService: PropietarioService, private router: Router, private predioService: PredioService) {
-    this.nombre = '';
-    this.apellidos = '';
-    this.dni = '';
-    this.porcentajePropiedad = 0;
-    this.estado = Estado.Casado;
-    this.notas = '';
+  array_CR_InteresadoTipo = Object.values(CR_InteresadoTipo);
+  array_CR_DocumentoTipo = Object.values(CR_DocumentoTipo);
+  array_CR_SexoTipo = Object.values(CR_SexoTipo);
+  array_Grupo_Etnico = Object.values(Grupo_Etnico);
+  autorizaProcesamientoDatosPersonales: boolean = false;
+  tipo: CR_InteresadoTipo = CR_InteresadoTipo.Persona_Natural;
+  tipoDocumento: CR_DocumentoTipo = CR_DocumentoTipo.Cedula_Ciudadania;
+  documentoIdentidad: string = '';
+  primerNombre: string = '';
+  segundoNombre: string = '';
+  primerApellido: string = '';
+  segundoApellido: string = '';
+  sexo: CR_SexoTipo = CR_SexoTipo.Masculino;
+  grupoEtnico: Grupo_Etnico = Grupo_Etnico.Ninguno;
+  telefono1: string = '';
+  correoElectronico: string = '';
+  autorizaNotificacionCorreo: boolean = false;
+  departamentos: Departamento[] = [];
+  municipios: Municipio[]  = [];
+  municipiosFiltrados: Municipio[] = [];
+  departamentoSeleccionado: string = '';
+  municipioSeleccionado: string = '';
+  notas: string = '';
+  porcentajePropiedad: number = 0;
+  estado: Estado = Estado.Soltero;
+
+  constructor(private propietarioService: PropietarioService, private router: Router, private predioService: PredioService, private dataService: DataService) {}
+
+  ngOnInit() {
+    this.dataService.getDepartamentos().subscribe(data => {
+      this.departamentos = data;
+    });
+
+    this.dataService.getMunicipios().subscribe(data => {
+      this.municipios = data;
+    });
+    console.log(this.departamentos)
   }
 
+  onDepartamentoChange() {
+    this.municipiosFiltrados = this.municipios.filter(
+      m => m.departamento === this.departamentoSeleccionado
+    );
+    // Resetea la selección del municipio si el departamento cambia
+    this.municipioSeleccionado = '';
+  }
   guardarPropietario() {
-    console.log(this.propietarioService.getPropietarios());
-    this.propietario = new Propietario(
-      this.nombre,
-      this.apellidos,
-      this.dni,
+    const nuevoPropietario = new Propietario(
+      this.autorizaProcesamientoDatosPersonales,
+      this.tipo,
+      this.tipoDocumento,
+      this.documentoIdentidad,
+      this.primerNombre,
+      this.segundoNombre,
+      this.primerApellido,
+      this.segundoApellido,
+      this.sexo,
+      this.grupoEtnico,
+      this.telefono1,
+      this.correoElectronico,
+      this.autorizaNotificacionCorreo,
+      this.departamentoSeleccionado,
+      this.municipioSeleccionado,
       this.notas,
       this.porcentajePropiedad,
       this.estado
-    )
-    if (!this.propietarioService.dniExists(this.propietario.dni)) {
+    );
 
-      // Añade el propietario al servicio PropietarioService
-      this.propietarioService.addPropietario(this.propietario);
+    if (!this.propietarioService.documentoIdentidadExists(this.documentoIdentidad)) {
+      this.propietarioService.addPropietario(nuevoPropietario);
 
-      //let predioActual = this.predioService.obtenerPredioActual();
       let predioActual = this.predioService.obtenerPredioActual();
-      // Añade el propietario al predio actual
-      if (!predioActual.propietarios) {
-        predioActual.propietarios = [];
-      }
-      predioActual.propietarios.push(this.propietario);
+      predioActual.propietarios.push(nuevoPropietario);
 
-
-
-      this.router.navigate(['/nuevo-predio/' , predioActual.id, 'datos-propietario'])
-      console.log(predioActual);
+      console.log(predioActual)
+      this.router.navigate(['/nuevo-predio/' , predioActual.id, 'datos-propietario']);
     } else {
-      alert('DNI DUPLICADO')}
+      alert('Documento de identidad duplicado');
+    }
   }
 
   eliminarPropietario() {
-    if (this.propietario) {
-      this.propietarioService.eliminarPropietario(this.propietario.dni);
+    if (this.documentoIdentidad) {
+      this.propietarioService.eliminarPropietario(this.documentoIdentidad);
 
-      // obtiene el predio actual y actualiza los propietarios
       let predioActual = this.predioService.obtenerPredioActual();
-      predioActual.propietarios = this.propietarioService.getPropietarios();
-      //this.predioService.guardarPredioActual(predioActual);
+      predioActual.propietarios = predioActual.propietarios.filter(p => p.documentoIdentidad !== this.documentoIdentidad);
 
-      this.router.navigate(['/nuevo-predio/:id/datos-propietario'])
-      console.log(predioActual);
+      this.router.navigate(['/nuevo-predio/:id/datos-propietario']);
     }
   }
+
+  protected readonly CR_SexoTipo = CR_SexoTipo;
+  protected readonly Grupo_Etnico = Grupo_Etnico;
+  protected readonly CR_InteresadoTipo = CR_InteresadoTipo;
+  protected readonly CR_DocumentoTipo = CR_DocumentoTipo;
 }

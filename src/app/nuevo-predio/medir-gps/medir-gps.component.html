@@ -5,13 +5,20 @@
     <p>Sitúese sobre el punto del lindero a medir</p>
   </div>
 
-  <div class="botones">
-    <button class="mainBtn" >Centrar mapa a mi posición</button>
-    <button class="mainBtn" >Medir punto</button>
-    <button class="mainBtn" >Borrar último punto</button>
-    <button class="mainBtn" >Tomar foto del terreno</button>
+  <div class="contador-puntos">
+    Puntos medidos: {{ puntosMedidos }}
   </div>
 
+  <div class="botones">
+    <button class="custom-button" (click)="centerMapToMyPosition()">Centrar mapa a mi posición</button>
+    <button class="custom-button" (click)="medirPunto()">Medir punto</button>
+    <button class="custom-button" (click)="borrarUltimoPunto()">Borrar último punto</button>
+    <button class="custom-button" (click)="takePhoto()">Tomar foto del terreno</button>
+  </div>
+
+  <div class="image-container" *ngIf="imagenCapturada">
+    <img [src]="imagenCapturada" alt="Foto del terreno" />
+  </div>
 
   <div id="contenedorMapa">
     <app-mapa>
@@ -20,7 +27,9 @@
 
 
   <div class="botones">
-    <button class="mainBtn" >Finalizar</button>
-    <button class="mainBtn" routerLink="../">Atrás</button>
+    <button class="custom-button" (click)="finalizarMedicion()">Finalizar</button>
+    <button class="custom-button" routerLink="../">Atrás</button>
   </div>
 </div>
+
+

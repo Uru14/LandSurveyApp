@@ -2,29 +2,69 @@
   <h1>Datos del predio</h1>
 
   <form>
-    <mat-form-field>
-      <input matInput placeholder="Cédula" [(ngModel)]="cedula" name="cedula" required>
+    <!-- Nombre del Predio -->
+    <mat-form-field class="custom-input">
+      <input matInput placeholder="Nombre del Predio" [(ngModel)]="nombre" name="nombre" required>
     </mat-form-field>
 
-    <mat-form-field>
-      <input matInput placeholder="Municipio" [(ngModel)]="municipio" name="municipio" required>
+    <!-- Departamento -->
+    <mat-form-field class="custom-input">
+      <mat-label>Departamento</mat-label>
+      <mat-select [(ngModel)]="departamentoSeleccionado" name="departamento" (selectionChange)="onDepartamentoChange()">
+        @for (depto of departamentos; track depto) {
+          <mat-option [value]="depto.departamento">{{depto.departamento}}</mat-option>
+        }
+      </mat-select>
     </mat-form-field>
 
-    <mat-form-field>
+    <!-- Sector del Predio -->
+    <mat-form-field class="custom-input">
+      <mat-label>Sector</mat-label>
+
+      <mat-select placeholder="Sector del Predio" [(ngModel)]="sectorPredio" name="sectorPredio">
+        <mat-option value="Norte">Norte</mat-option>
+        <mat-option value="Sur">Sur</mat-option>
+        <mat-option value="Este">Este</mat-option>
+        <mat-option value="Oeste">Oeste</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <!-- Municipio -->
+    <mat-form-field class="custom-input">
+      <mat-label>Municipio</mat-label>
+
+      <mat-select [(ngModel)]="municipioSeleccionado" name="municipios">
+        @for (mun of municipiosFiltrados; track mun) {
+          <mat-option [value]="mun.nombre_municipio">{{mun.nombre_municipio}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <!-- Vereda -->
+    <mat-form-field class="custom-input">
       <input matInput placeholder="Vereda" [(ngModel)]="vereda" name="vereda" required>
     </mat-form-field>
 
-    <mat-form-field>
-      <textarea matInput placeholder="Como se accede al predio" [(ngModel)]="acceso" name="acceso"></textarea>
+    <!-- Número Predial -->
+    <mat-form-field class="custom-input">
+      <input matInput placeholder="Número Predial" [(ngModel)]="numeroPredial" name="numeroPredial" required>
     </mat-form-field>
 
-    <mat-radio-group [(ngModel)]="cultivable" name="cultivable" required>
-      <mat-radio-button value="true">Lo cultiva</mat-radio-button>
-      <mat-radio-button value="false">No lo cultiva</mat-radio-button>
-    </mat-radio-group>
+    <!-- Tipo del Predio -->
+    <mat-form-field class="custom-input">
+      <mat-select [(ngModel)]="tipo" name="tipo">
+        @for (tipo of array_LC_PredioTipo; track tipo) {
+          <mat-option [value]="tipo">{{tipo}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
 
+    <!-- Complemento -->
+    <mat-form-field class="custom-input">
+      <textarea matInput placeholder="Complemento" [(ngModel)]="complemento" name="complemento"></textarea>
+    </mat-form-field>
+
+    <button mat-raised-button class="custom-button" (click)="guardarDatos()">Guardar</button>
+    <button mat-raised-button class="custom-button" routerLink='../'>Atrás</button>
   </form>
-
-  <button mat-raised-button (click)="guardarDatos()">Guardar</button>
-  <button mat-raised-button routerLink='../'>Atrás</button>
 </div>

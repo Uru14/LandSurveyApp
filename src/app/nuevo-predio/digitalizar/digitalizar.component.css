@@ -40,21 +40,26 @@
 #contenedorMapa {
   height: 80vh;
   border: 2px solid yellow;
-  width: 90%;
+  width: 80%;
 }
 
 #botones{
-  width: 90%;
+  width: 100%;
   margin-top: 5px;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.mainBtn {
-  width: 100%;
+.custom-button {
+  width: 80%;
   height: 50px;
   margin: 10px;
   background-color: #256ec5;
   color: #fff;
+  transition: background-color 0.3s ease;
+}
+
+.custom-button:active {
+  background-color: #1b4c8a;
 }

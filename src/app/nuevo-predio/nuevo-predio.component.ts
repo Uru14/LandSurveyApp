@@ -12,10 +12,9 @@ export class NuevoPredioComponent {
 
   guardarPredio() {
 
-    // Obtén el predio actual desde el servicio
     let predioActual = this.predioService.obtenerPredioActual();
     console.log(predioActual)
-    // Guarda el predio actual
+
     this.predioService.guardarPredioActual(predioActual);
 
     console.log(predioActual)

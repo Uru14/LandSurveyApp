@@ -15,6 +15,8 @@ import {AddDocumentoComponent} from "./nuevo-predio/documentos/add-documento/add
 import {EditarDocumentoComponent} from "./nuevo-predio/documentos/editar-documento/editar-documento.component";
 import {ImagenesComponent} from "./nuevo-predio/imagenes/imagenes.component";
 import {AddImagenComponent} from "./nuevo-predio/imagenes/add-imagen/add-imagen.component";
+import {EditarImagenComponent} from "./nuevo-predio/imagenes/editar-imagen/editar-imagen.component";
+import {MedirGpsComponent} from "./nuevo-predio/medir-gps/medir-gps.component";
 
 const routes: Routes = [
   {path: '', component: MainScreenComponent, pathMatch: 'full'},
@@ -24,6 +26,7 @@ const routes: Routes = [
   { path: 'editar-datos-predio/:id', component: EditarDatosPredioComponent },
   { path: 'nuevo-predio/:id', component: NuevoPredioComponent},
   { path: 'nuevo-predio/:id/datos-predio', component: DatosPredioComponent},
+  { path: 'nuevo-predio/:id/medir-gps', component: MedirGpsComponent},
   { path: 'nuevo-predio/:id/digitalizar', component: DigitalizarComponent },
   { path: 'nuevo-predio/:id/documentos', component: DocumentosComponent },
   { path: 'nuevo-predio/:id/documentos/add-documento', component: AddDocumentoComponent },
@@ -31,8 +34,11 @@ const routes: Routes = [
   { path: 'nuevo-predio/:id/datos-propietario', component: DatosPropietarioComponent},
   { path: 'nuevo-predio/:id/imagenes', component: ImagenesComponent},
   { path: 'nuevo-predio/:id/imagenes/add-imagen', component: AddImagenComponent},
+  { path: 'nuevo-predio/:id/imagenes/editar-imagen/:i', component: EditarImagenComponent},
   { path: 'nuevo-predio/:id/datos-propietario/add-propietario', component: AddPropietarioComponent },
-  { path: 'nuevo-predio/:id/datos-propietario/editar-propietario/:dni', component: EditarPropietarioComponent },
+  { path: 'nuevo-predio/:id/datos-propietario/editar-propietario/:documentoIdentidad', component: EditarPropietarioComponent },
+
+
 ];
 
 @NgModule({

@@ -27,7 +27,7 @@ export class DigitalizarComponent implements OnInit{
   finalizar() {
     let predioActual = this.predioService.obtenerPredioActual();
 
-    // Limpiar el arreglo de geometrías antes de comenzar a procesar las nuevas
+
     this.geometriaService.limpiarGeometrias();
 
     CONFIG_OPENLAYERS.SOURCE_DRAW.getFeatures().forEach((feature: Feature) => {

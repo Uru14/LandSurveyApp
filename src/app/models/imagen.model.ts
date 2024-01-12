@@ -1,16 +1,26 @@
-export enum TipoDocumento {
+export enum LC_FuenteAdministrativaTipo {
+  Documento_Publico = "Documento Público",
+  Escritura_Publica = "Escritura Pública",
+  Sentencia_Judicial = "Sentencia Judicial",
+  Acto_Administrativo = "Acto Administrativo",
+  Sin_Documento = "Sin Documento",
+  Croquis_Campo = "Croquis de Campo",
+  Datos_Crudos = "Datos Crudos",
+  Ortofoto = "Ortofoto",
+  Informe_Tecnico = "Informe Técnico",
+  Registro_Fotografico = "Registro Fotográfico",
   DNI = "DNI",
-  Escritura = "Escritura",
-  Declaracion = "Declaración"
+  Imagen_propietario = "Imagen del Propietario",
+  Acuerdo_colindantes = "Acuerdo con Colindantes"
 
 }
 export class Imagen {
-  tipo_doc : TipoDocumento
+  tipo_doc : LC_FuenteAdministrativaTipo
   num_pag: number
   notas: string
-  imageData: string //base64 de la imagen
+  imageData: string | undefined //base64 de la imagen
 
-  constructor(tipo_doc: TipoDocumento, num_pag: number, notas: string, imageData: string) {
+  constructor(tipo_doc: LC_FuenteAdministrativaTipo, num_pag: number, notas: string, imageData: string) {
     this.tipo_doc = tipo_doc
     this.num_pag = num_pag
     this.notas = notas

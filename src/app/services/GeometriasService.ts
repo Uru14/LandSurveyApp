@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Coordenadas } from '../models/geometria.model';
-import { Storage } from '@capacitor/storage';
+import { Preferences } from '@capacitor/preferences';
 @Injectable({
   providedIn: 'root',
 })
 export class GeometriasService {
   private geometria: Coordenadas[] = [];
-  private readonly STORAGE_KEY = 'geometrias';
+  private readonly PREFERENCES_KEY = 'geometrias';
 
   constructor() {}
 
@@ -33,14 +33,14 @@ export class GeometriasService {
   }
 
   private async guardarGeometrias() {
-    await Storage.set({
-      key: this.STORAGE_KEY,
+    await Preferences.set({
+      key: this.PREFERENCES_KEY,
       value: JSON.stringify(this.geometria),
     });
   }
 
   private async cargarGeometrias() {
-    let geometriasAlmacenadas = await Storage.get({ key: this.STORAGE_KEY });
+    let geometriasAlmacenadas = await Preferences.get({ key: this.PREFERENCES_KEY });
     this.geometria = geometriasAlmacenadas && geometriasAlmacenadas.value
       ? JSON.parse(geometriasAlmacenadas.value) : [];
   }

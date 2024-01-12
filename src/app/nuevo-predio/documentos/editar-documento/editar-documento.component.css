@@ -12,12 +12,24 @@ form{
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  width: 100%;
 }
 
-button {
+
+.custom-input {
+  width: 80%;
+}
+
+.custom-button {
   width: 80%;
   height: 50px;
   margin: 10px;
   background-color: #256ec5;
   color: #fff;
+  transition: background-color 0.3s ease;
 }
+
+.custom-button:active {
+  background-color: #1b4c8a;
+}
+

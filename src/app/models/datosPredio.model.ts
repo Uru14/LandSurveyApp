@@ -1,15 +1,36 @@
-export class DatosPredio {
-  cedula: string | null;
-  municipio: string | null;
-  vereda: string | null;
-  acceso: string | null;
-  cultivable: boolean | null;
+export enum LC_PredioTipo {
+  Baldio = "Baldio",
+  Fiscal_Patrimonial = "Fiscal_Patrimonial",
+  Uso_Publico = "Uso_Publico",
+  Publico = "Publico",
+  Privado = "Privado"
+}
 
-  constructor(cedula: string, municipio: string, vereda: string, acceso: string, cultivable: boolean) {
-    this.cedula = cedula;
+export enum SectorPredio {
+  Norte = "Norte",
+  Sur = "Sur",
+  Este = "Este",
+  Oeste = "Oeste"
+}
+
+export class DatosPredio {
+  nombre: string;
+  departamento: string;
+  sectorPredio: SectorPredio;
+  municipio: string;
+  vereda: string;
+  numeroPredial: string;
+  tipo: LC_PredioTipo;
+  complemento: string;
+
+  constructor(nombre: string, departamento: string, sectorPredio: SectorPredio, municipio: string, vereda: string, numeroPredial: string, tipo: LC_PredioTipo, complemento: string) {
+    this.nombre = nombre;
+    this.departamento = departamento;
+    this.sectorPredio = sectorPredio;
     this.municipio = municipio;
     this.vereda = vereda;
-    this.acceso = acceso;
-    this.cultivable = cultivable;
+    this.numeroPredial = numeroPredial;
+    this.tipo = tipo;
+    this.complemento = complemento;
   }
 }

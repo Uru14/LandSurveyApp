@@ -1,37 +1,119 @@
 <div class="container">
-  <h1>Editar propietario</h1>
-
+  <h1>Editar interesado</h1>
   <form>
-    <mat-form-field>
-      <input matInput placeholder="Nombre" [(ngModel)]="propietario.nombre" name="nombre" required>
+
+    <!-- Tipo de Documento -->
+    <mat-form-field class="custom-input">
+      <mat-select [(ngModel)]="tipoDocumento" name="tipoDocumento">
+        @for (tipoDoc of array_CR_DocumentoTipo; track tipoDoc) {
+          <mat-option [value]="tipoDoc">{{tipoDoc}}</mat-option>
+        }
+      </mat-select>
     </mat-form-field>
 
-    <mat-form-field>
-      <input matInput placeholder="Apellidos" [(ngModel)]="propietario.apellidos" name="apellidos" required>
+
+    <!-- Documento de Identidad -->
+    <mat-form-field class="custom-input">
+      <input matInput placeholder="Documento de Identidad" [(ngModel)]="propietario.documentoIdentidad" name="documentoIdentidad" required>
     </mat-form-field>
 
-    <mat-form-field>
-      <input matInput placeholder="DNI" [(ngModel)]="propietario.dni" name="dni" pattern="[0-9]{8}[a-zA-Z]" required>
-      <!--<mat-error>
-        @if(form.controls[dni].hasError(pattern)) {"El DNI debe tener 8 números seguidos por 1 letra}
-      </mat-error>-->
+    <mat-form-field class="custom-input">
+      <mat-select [(ngModel)]="tipo" name="tipo">
+        @for (tipo of array_CR_InteresadoTipo; track tipo) {
+          <mat-option [value]="tipo">{{tipo}}</mat-option>
+        }
+      </mat-select>
     </mat-form-field>
 
-    <mat-form-field>
-      <input matInput type="number" placeholder="% Propiedad" [(ngModel)]="propietario.porcentaje_propiedad" name="porcentajePropiedad" min="1" max="100" required>
+    <!-- Primer Nombre -->
+    <mat-form-field class="custom-input">
+      <input matInput placeholder="Primer Nombre" [(ngModel)]="propietario.primerNombre" name="primerNombre" required>
     </mat-form-field>
 
-    <mat-radio-group [(ngModel)]="propietario.estado" name="estado" required>
-      <mat-radio-button value="soltero">Soltero</mat-radio-button>
-      <mat-radio-button value="casado">Casado</mat-radio-button>
+    <!-- Segundo Nombre -->
+    <mat-form-field class="custom-input">
+      <input matInput placeholder="Segundo Nombre" [(ngModel)]="propietario.segundoNombre" name="segundoNombre">
+    </mat-form-field>
+
+    <!-- Apellidos -->
+    <mat-form-field class="custom-input">
+      <input matInput placeholder="Primer Apellido" [(ngModel)]="propietario.primerApellido" name="primerApellido" required>
+    </mat-form-field>
+    <mat-form-field class="custom-input">
+      <input matInput placeholder="Segundo Apellido" [(ngModel)]="propietario.segundoApellido" name="segundoApellido">
+    </mat-form-field>
+
+    <!-- Sexo -->
+    <mat-form-field class="custom-input">
+      <mat-label>Sexo</mat-label>
+      <mat-select [(ngModel)]="sexo" name="sexo">
+        @for (sexo of array_CR_SexoTipo; track sexo) {
+          <mat-option [value]="sexo">{{sexo}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+
+    <!-- Grupo Étnico -->
+    <mat-form-field class="custom-input">
+      <mat-label>Grupo Étnico</mat-label>
+      <mat-select [(ngModel)]="grupoEtnico" name="grupoEtnico">
+        @for (grupo of array_Grupo_Etnico; track grupo) {
+          <mat-option [value]="grupo">{{grupo}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field class="custom-input">
+      <input matInput type="tel" placeholder="Teléfono" [(ngModel)]="telefono1" name="telefono1">
+    </mat-form-field>
+
+    <mat-form-field class="custom-input">
+      <input matInput type="email" placeholder="Correo Electrónico" [(ngModel)]="correoElectronico" name="correoElectronico">
+    </mat-form-field>
+
+    <mat-checkbox [(ngModel)]="autorizaNotificacionCorreo" name="autorizaNotificacionCorreo">
+      Autoriza notificación por correo
+    </mat-checkbox>
+
+    <mat-form-field class="custom-input">
+      <mat-select [(ngModel)]="departamentoSeleccionado" name="departamento" (selectionChange)="onDepartamentoChange()">
+        @for (depto of departamentos; track depto) {
+          <mat-option [value]="depto.departamento">{{depto.departamento}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field class="custom-input">
+      <mat-select [(ngModel)]="municipioSeleccionado" name="municipios">
+        @for (mun of municipiosFiltrados; track mun) {
+          <mat-option [value]="mun.nombre_municipio">{{mun.nombre_municipio}}</mat-option>
+        }
+      </mat-select>
+
+    </mat-form-field>
+
+    <mat-form-field class="custom-input">
+      <mat-label>% Propiedad</mat-label>
+      <input matInput type="number" placeholder="% Propiedad" [(ngModel)]="porcentajePropiedad" name="porcentajePropiedad" min="1" max="100" required>
+    </mat-form-field>
+
+    <mat-radio-group [(ngModel)]="estado" name="estado" required>
+      <mat-radio-button value="Casado">Casado</mat-radio-button>
+      <mat-radio-button value="Soltero">Soltero</mat-radio-button>
     </mat-radio-group>
 
-    <mat-form-field>
-      <textarea matInput placeholder="Notas" [(ngModel)]="propietario.notas" name="notas"></textarea>
+    <mat-form-field class="custom-input">
+      <textarea matInput placeholder="Notas" [(ngModel)]="notas" name="notas"></textarea>
     </mat-form-field>
-  </form>
 
-  <button mat-raised-button (click)="guardarPropietario()">Guardar</button>
-  <button mat-raised-button (click)="eliminarPropietario()">Eliminar</button>
-  <button mat-raised-button routerLink='../../'>Atrás</button>
+    <mat-checkbox [(ngModel)]="autorizaProcesamientoDatosPersonales" name="autorizaDatos">
+      Autoriza procesamiento de datos personales
+    </mat-checkbox>
+
+
+    <button mat-raised-button class="custom-button" (click)="guardarPropietario()">Guardar</button>
+    <button mat-raised-button class="custom-button" (click)="eliminarPropietario()">Eliminar</button>
+    <button mat-raised-button class="custom-button" routerLink='../../'>Atrás</button>
+  </form>
 </div>

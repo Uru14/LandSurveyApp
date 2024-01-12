@@ -1,14 +1,14 @@
 <div class="container">
-  <h1>Añadir/Editar propietarios</h1>
-  <p>Propietarios actuales.
-  Click sobre el propietario para editarlo
+  <h1>Añadir/Editar interesados</h1>
+  <p>Interesados actuales.
+  Click sobre el interesados para editarlo
   </p>
   <div class="listaPropietarios">
-    @for (propietario of propietarios; track propietario.dni) {
-      <div class="propietario" (click)="editarPropietario(propietario.dni)">{{propietario.dni}}</div>
+    @for (propietario of propietarios; track propietario.documentoIdentidad) {
+      <div class="propietario" (click)="editarPropietario(propietario.documentoIdentidad)">{{propietario.documentoIdentidad}}</div>
     }
   </div>
 
-  <button mat-raised-button routerLink='add-propietario'>Añadir propietario</button>
+  <button mat-raised-button routerLink='add-propietario'>Añadir interesados</button>
   <button mat-raised-button routerLink='../'>Atrás</button>
 </div>
