@@ -5,12 +5,13 @@ import { PropietarioService } from '../../../services/PropietarioService';
 import { PredioService } from '../../../services/PredioService';
 import {MatRadioModule} from "@angular/material/radio";
 import {MatCheckboxModule} from "@angular/material/checkbox";
-import {FormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MatInputModule} from "@angular/material/input";
 import {MatSelectModule} from "@angular/material/select";
-import {LC_FuenteAdministrativaTipo} from "../../../models/imagen.model";
 import { DataService } from '../../../services/DataService';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import {Departamento, Municipio} from "../../../models/propietario.model";
+import {MatButtonModule} from "@angular/material/button";
 
 @Component({
   selector: 'app-add-propietario',
@@ -21,12 +22,15 @@ import {Departamento, Municipio} from "../../../models/propietario.model";
     FormsModule,
     MatCheckboxModule,
     MatRadioModule,
-    MatSelectModule
+    MatSelectModule,
+    ReactiveFormsModule,
+    MatButtonModule
   ],
   templateUrl: './add-propietario.component.html',
   styleUrl: './add-propietario.component.css'
 })
 export class AddPropietarioComponent {
+  formulario: FormGroup;
   array_CR_InteresadoTipo = Object.values(CR_InteresadoTipo);
   array_CR_DocumentoTipo = Object.values(CR_DocumentoTipo);
   array_CR_SexoTipo = Object.values(CR_SexoTipo);
@@ -53,8 +57,30 @@ export class AddPropietarioComponent {
   porcentajePropiedad: number = 0;
   estado: Estado = Estado.Soltero;
 
-  constructor(private propietarioService: PropietarioService, private router: Router, private predioService: PredioService, private dataService: DataService) {}
 
+  constructor(private propietarioService: PropietarioService, private router: Router, private predioService: PredioService, private dataService: DataService) {
+    // Inicializa el FormGroup dentro del constructor
+    this.formulario = new FormGroup({
+      tipoDocumento: new FormControl('', Validators.required),
+      documentoIdentidad: new FormControl('', [Validators.required, Validators.minLength(4)]),
+      tipo: new FormControl('', Validators.required),
+      primerNombre: new FormControl('', Validators.required),
+      segundoNombre: new FormControl(''), // No requerido
+      primerApellido: new FormControl('', Validators.required),
+      segundoApellido: new FormControl(''), // No requerido
+      sexo: new FormControl('', Validators.required),
+      grupoEtnico: new FormControl(''), // No requerido
+      telefono1: new FormControl(''), // No requerido
+      correoElectronico: new FormControl('', [Validators.required, Validators.email]),
+      departamentoSeleccionado: new FormControl('', Validators.required),
+      municipioSeleccionado: new FormControl('', Validators.required),
+      notas: new FormControl(''),
+      porcentajePropiedad: new FormControl('', [Validators.required, Validators.min(0), Validators.max(100)]),
+      estado: new FormControl(''), // No requerido
+      autorizaProcesamientoDatosPersonales: new FormControl(false, Validators.requiredTrue), // Requiere ser true para ser válido
+      autorizaNotificacionCorreo: new FormControl(false, Validators.requiredTrue)
+    });
+  }
   ngOnInit() {
     this.dataService.getDepartamentos().subscribe(data => {
       this.departamentos = data;
@@ -68,56 +94,59 @@ export class AddPropietarioComponent {
 
   onDepartamentoChange() {
     this.municipiosFiltrados = this.municipios.filter(
-      m => m.departamento === this.departamentoSeleccionado
+      m => m.departamento === this.formulario.value.departamentoSeleccionado
     );
+
     // Resetea la selección del municipio si el departamento cambia
-    this.municipioSeleccionado = '';
+    this.formulario.get('municipioSeleccionado')!.setValue('');
   }
   guardarPropietario() {
-    const nuevoPropietario = new Propietario(
-      this.autorizaProcesamientoDatosPersonales,
-      this.tipo,
-      this.tipoDocumento,
-      this.documentoIdentidad,
-      this.primerNombre,
-      this.segundoNombre,
-      this.primerApellido,
-      this.segundoApellido,
-      this.sexo,
-      this.grupoEtnico,
-      this.telefono1,
-      this.correoElectronico,
-      this.autorizaNotificacionCorreo,
-      this.departamentoSeleccionado,
-      this.municipioSeleccionado,
-      this.notas,
-      this.porcentajePropiedad,
-      this.estado
-    );
+    // 1. Validar el formulario
+    if (this.formulario.valid) {
+      // 2. Crear un objeto Propietario con los datos del formulario
+      const nuevoPropietario = new Propietario(
+        this.formulario.value.autorizaProcesamientoDatosPersonales,
+        this.formulario.value.tipo,
+        this.formulario.value.tipoDocumento,
+        this.formulario.value.documentoIdentidad,
+        this.formulario.value.primerNombre,
+        this.formulario.value.segundoNombre,
+        this.formulario.value.primerApellido,
+        this.formulario.value.segundoApellido,
+        this.formulario.value.sexo,
+        this.formulario.value.grupoEtnico,
+        this.formulario.value.telefono1,
+        this.formulario.value.correoElectronico,
+        this.formulario.value.autorizaNotificacionCorreo,
+        this.formulario.value.departamentoSeleccionado,
+        this.formulario.value.municipioSeleccionado,
+        this.formulario.value.notas,
+        this.formulario.value.porcentajePropiedad,
+        this.formulario.value.estado
+      );
 
-    if (!this.propietarioService.documentoIdentidadExists(this.documentoIdentidad)) {
-      this.propietarioService.addPropietario(nuevoPropietario);
+      // 3. Comprobar si el documento de identidad ya existe
+      if (!this.propietarioService.documentoIdentidadExists(this.formulario.value.documentoIdentidad)) {
+        // 4. Guardar el propietario
+        this.propietarioService.addPropietario(nuevoPropietario);
 
-      let predioActual = this.predioService.obtenerPredioActual();
-      predioActual.propietarios.push(nuevoPropietario);
+        // 5. Actualizar el predio actual
+        let predioActual = this.predioService.obtenerPredioActual();
+        predioActual.propietarios.push(nuevoPropietario);
+        console.log(predioActual);
 
-      console.log(predioActual)
-      this.router.navigate(['/nuevo-predio/' , predioActual.id, 'datos-propietario']);
+        // Navegar a la siguiente página
+        this.router.navigate(['/nuevo-predio/' , predioActual.id, 'datos-propietario']);
+      } else {
+        // Manejar el caso de documento de identidad duplicado
+        alert('Documento de identidad duplicado');
+      }
     } else {
-      alert('Documento de identidad duplicado');
+      // Manejar el caso de formulario no válido
+      alert('Por favor, completa todos los campos requeridos.');
     }
   }
 
-  eliminarPropietario() {
-    if (this.documentoIdentidad) {
-      this.propietarioService.eliminarPropietario(this.documentoIdentidad);
-
-      let predioActual = this.predioService.obtenerPredioActual();
-      predioActual.propietarios = predioActual.propietarios.filter(p => p.documentoIdentidad !== this.documentoIdentidad);
-
-      this.router.navigate(['/nuevo-predio/:id/datos-propietario']);
-    }
-  }
 
   protected readonly CR_SexoTipo = CR_SexoTipo;
   protected readonly Grupo_Etnico = Grupo_Etnico;

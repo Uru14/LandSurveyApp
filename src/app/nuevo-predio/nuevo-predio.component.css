@@ -8,17 +8,4 @@
   background-color: #f0f0f0;
 }
 
-.custom-button {
-  width: 80%;
-  height: 50px;
-  margin: 10px;
-  background-color: #256ec5;
-  color: #fff;
-  transition: background-color 0.3s ease;
-}
-
-.custom-button:active {
-  background-color: #1b4c8a;
-}
-
 

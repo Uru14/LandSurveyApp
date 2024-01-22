@@ -6,6 +6,7 @@ import {CONFIG_OPENLAYERS} from "../../configuracion-openlayers";
 import Feature from 'ol/Feature.js';
 import {GeometriasService} from "../../services/GeometriasService";
 import Polygon from 'ol/geom/Polygon.js';
+import {Router} from "@angular/router";
 
 
 @Component({
@@ -18,11 +19,22 @@ export class DigitalizarComponent implements OnInit{
 
   protected readonly mapDraw = mapDraw;
   protected readonly map = map;
-  constructor(private predioService: PredioService, private geometriaService: GeometriasService) {
+  constructor(private predioService: PredioService, private geometriaService: GeometriasService, private router: Router) {
   }
 
   ngOnInit(): void {
-    mapDraw.clearVectorLayer();
+    let predioActual = this.predioService.obtenerPredioActual();
+
+    // Verificar si hay geometrías existentes
+    if (predioActual && predioActual.geometrias.length > 0) {
+      if (window.confirm("Hay geometrías dibujadas para este predio. ¿Desea eliminarlas?")) {
+        this.geometriaService.limpiarGeometrias();
+        predioActual.geometrias = [];
+        mapDraw.clearVectorLayer(); // Limpiar solo si el usuario confirma que quiere eliminarlas
+      }
+    } else {
+      mapDraw.clearVectorLayer();
+    }
   }
   finalizar() {
     let predioActual = this.predioService.obtenerPredioActual();
@@ -32,18 +44,6 @@ export class DigitalizarComponent implements OnInit{
 
     CONFIG_OPENLAYERS.SOURCE_DRAW.getFeatures().forEach((feature: Feature) => {
       let geometry = feature.getGeometry();
-
-      /*if (geometry instanceof Point) {
-        let coordinates = geometry.getCoordinates();
-        console.log('Punto:', coordinates);
-        return new Coordenadas(coordinates[0], coordinates[1]);
-
-      } else if (geometry instanceof LineString) {
-        let coordinates = geometry.getCoordinates();
-        console.log('Distancia:', coordinates);
-        return coordinates.map(coord => new Coordenadas(coord[0], coord[1]));
-
-      } else*/
       if (geometry instanceof Polygon) {
         let coordinates = geometry.getCoordinates()[0];
         console.log('Polígono:', coordinates);
@@ -65,5 +65,6 @@ export class DigitalizarComponent implements OnInit{
     }
     console.log(predioActual.geometrias)
     mapDraw.disableDrawings();
+    this.router.navigate(['/nuevo-predio/',predioActual.id]);
   }
 }

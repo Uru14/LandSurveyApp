@@ -19,9 +19,9 @@
     </app-mapa>
   </div>
 
-  <div id="botones">
-    <button class="custom-button" (click)="mapDraw.clearVectorLayer()">Comenzar de nuevo</button>
-    <button class="custom-button" (click)="finalizar()">Finalizar</button>
-    <button class="custom-button" routerLink="../">Atrás</button>
+  <div class="button-container">
+    <button mat-raised-button (click)="mapDraw.clearVectorLayer()">Comenzar de nuevo</button>
+    <button mat-raised-button (click)="finalizar()">Finalizar</button>
+    <button mat-raised-button routerLink="../">Atrás</button>
   </div>
 </div>

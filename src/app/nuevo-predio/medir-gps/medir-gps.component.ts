@@ -26,8 +26,18 @@ export class MedirGpsComponent {
               private predioService: PredioService, private imagenService: ImagenService) {}
 
   ngAfterViewInit(): void {
+    let predioActual = this.predioService.obtenerPredioActual();
 
-
+    // Verificar si hay geometrías existentes
+    if (predioActual && predioActual.geometrias.length > 0) {
+      if (window.confirm("Hay geometrías dibujadas para este predio. ¿Desea eliminarlas?")) {
+        this.geometriasService.limpiarGeometrias();
+        predioActual.geometrias = [];
+        mapDraw.clearVectorLayer(); // Limpiar solo si el usuario confirma que quiere eliminarlas
+      }
+    } else {
+      mapDraw.clearVectorLayer();
+    }
     // Espera a que el mapa esté listo antes de deshabilitar las interacciones de dibujo
     if (CONFIG_OPENLAYERS.MAP) {
       mapDraw.disableDrawings();

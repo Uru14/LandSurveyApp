@@ -3,9 +3,9 @@
   <p>Interesados actuales.
   Click sobre el interesados para editarlo
   </p>
-  <div class="listaPropietarios">
+  <div class="list">
     @for (propietario of propietarios; track propietario.documentoIdentidad) {
-      <div class="propietario" (click)="editarPropietario(propietario.documentoIdentidad)">{{propietario.documentoIdentidad}}</div>
+      <div class="list-item" (click)="editarPropietario(propietario.documentoIdentidad)">{{propietario.documentoIdentidad}}</div>
     }
   </div>
 

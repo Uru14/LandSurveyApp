@@ -17,7 +17,8 @@ import { Router } from '@angular/router';
 })
 export class EditarPredioComponent implements OnInit{
 
-
+  titulo: string =  "Editar Predio ";
+  predioActual = this.predioService.obtenerPredioActual();
   constructor(private predioService: PredioService, private geometriasService: GeometriasService, private route: ActivatedRoute, private router: Router) {
   }
   protected readonly mapDraw = mapDraw;
@@ -25,9 +26,22 @@ export class EditarPredioComponent implements OnInit{
 
   ngOnInit(): void {
     mapDraw.clearVectorLayer();
-    this.getCoordPredio();
+    this.route.params.subscribe(params => {
+      const predioId = +params['id'];
+      this.cargarPredio(predioId);
+    });
   }
 
+  private cargarPredio(predioId: number) {
+    const predioSeleccionado = this.predioService.getListaPredios().find(predio => predio.id === predioId);
+    if (predioSeleccionado) {
+      this.predioActual = predioSeleccionado;
+      this.titulo += this.predioActual.id;
+      this.getCoordPredio();
+    } else {
+      console.error('Predio no encontrado con ID:', predioId);
+    }
+  }
   private getCoordPredio() {
 
     this.route.params.subscribe(params => {
@@ -73,11 +87,33 @@ export class EditarPredioComponent implements OnInit{
     return arrayXY;
   }
 
-  private agregarCoordenadasAlMapa(arrayXY: number[][]) {
+  /*private agregarCoordenadasAlMapa(arrayXY: number[][]) {
     // Agrega las coordenadas al mapa
     mapDraw.addPolygonToLayer(arrayXY);
     mapDraw.disableDrawings()
+
+  }*/
+
+  private agregarCoordenadasAlMapa(arrayXY: number[][]) {
+    // Verifica si hay coordenadas válidas
+    if (arrayXY.length > 0 && arrayXY[0].length > 1) {
+      // Agrega las coordenadas al mapa
+      mapDraw.addPolygonToLayer(arrayXY);
+      mapDraw.disableDrawings();
+
+      // Crear una extensión que contenga todas las coordenadas
+      const extent = new Polygon([arrayXY]).getExtent();
+
+      // Hacer zoom al mapa para que se ajuste a la extensión de las coordenadas
+      CONFIG_OPENLAYERS.MAP.getView().fit(extent, {
+        duration: 1000, // Duración en milisegundos para la animación del zoom
+        padding: [50, 50, 50, 50] // Espacio extra alrededor de las coordenadas en píxeles
+      });
+    } else {
+      console.warn("No se encontraron coordenadas válidas para hacer zoom");
+    }
   }
+
 
   private obtenerPredioPorId(predioId: number) {
     return this.predioService

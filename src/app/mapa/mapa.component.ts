@@ -16,17 +16,19 @@ import VectorLayer from "ol/layer/Vector";
 import VectorSource from "ol/source/Vector";
 import Feature from "ol/Feature.js";
 import Polygon from "ol/geom/Polygon.js";
+import {DataService} from "../services/DataService";
 @Component({
   selector: 'app-mapa',
   templateUrl: './mapa.component.html',
   styleUrls: ['./mapa.component.css']
 })
 export class MapaComponent implements OnInit {
-
-  constructor() { }
+  selectedSRC: string = 'EPSG:4326';
+  constructor(private dataService: DataService) { }
 
   ngOnInit(): void {
     this.inicializarMapa();
+    this.escucharCambiosSrc();
     mapDraw.addDrawPolygonInteraction();
     mapDraw.addDrawPointInteraction();
     mapDraw.addDrawLineInteraction();
@@ -90,6 +92,19 @@ export class MapaComponent implements OnInit {
 
   }
 
+  escucharCambiosSrc() {
+    const currentView = CONFIG_OPENLAYERS.MAP.getView();
+    const currentProjection = currentView.getProjection().getCode();
 
+    // Imprimir la proyección actual antes del cambio
+    console.log('Proyección actual:', currentProjection);
+    this.dataService.src$.subscribe(newSrc => {
+      const currentView = CONFIG_OPENLAYERS.MAP.getView();
+      const newView = this.dataService.getUpdatedView(currentView, newSrc);
+      CONFIG_OPENLAYERS.MAP.setView(newView);
+      const newProjection = CONFIG_OPENLAYERS.MAP.getView().getProjection().getCode();
+      console.log('Nueva proyección:', newProjection);
+    });
+  }
 }
 

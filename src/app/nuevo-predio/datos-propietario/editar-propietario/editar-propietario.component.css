@@ -18,6 +18,12 @@ form{
   width: 80%;
 }
 
+.custom-button[disabled] {
+  background-color: grey;
+  color: darkgray;
+  cursor: not-allowed;
+}
+/*
 .custom-button {
   width: 80%;
   height: 50px;
@@ -29,4 +35,4 @@ form{
 
 .custom-button:active {
   background-color: #1b4c8a;
-}
+}*/

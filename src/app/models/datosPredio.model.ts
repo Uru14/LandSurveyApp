@@ -16,6 +16,7 @@ export enum SectorPredio {
 export class DatosPredio {
   nombre: string;
   departamento: string;
+  provincia: string;
   sectorPredio: SectorPredio;
   municipio: string;
   vereda: string;
@@ -23,9 +24,10 @@ export class DatosPredio {
   tipo: LC_PredioTipo;
   complemento: string;
 
-  constructor(nombre: string, departamento: string, sectorPredio: SectorPredio, municipio: string, vereda: string, numeroPredial: string, tipo: LC_PredioTipo, complemento: string) {
+  constructor(nombre: string, departamento: string, provincia: string, sectorPredio: SectorPredio, municipio: string, vereda: string, numeroPredial: string, tipo: LC_PredioTipo, complemento: string) {
     this.nombre = nombre;
     this.departamento = departamento;
+    this.provincia = provincia;
     this.sectorPredio = sectorPredio;
     this.municipio = municipio;
     this.vereda = vereda;

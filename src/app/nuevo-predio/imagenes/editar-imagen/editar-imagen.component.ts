@@ -11,6 +11,7 @@ import {PropietarioService} from "../../../services/PropietarioService";
 import {PredioService} from "../../../services/PredioService";
 import {ImagenService} from "../../../services/ImagenService";
 import {DocTypeEnum} from "../../../models/documento.model";
+import {MatButtonModule} from "@angular/material/button";
 
 @Component({
   selector: 'app-editar-imagen',
@@ -23,7 +24,8 @@ import {DocTypeEnum} from "../../../models/documento.model";
     ReactiveFormsModule,
     RouterLink,
     MatOptionModule,
-    MatSelectModule
+    MatSelectModule,
+    MatButtonModule
   ],
   templateUrl: './editar-imagen.component.html',
   styleUrl: './editar-imagen.component.css'

@@ -4,13 +4,15 @@ import {PropietarioService} from "../../services/PropietarioService";
 import {Propietario} from "../../models/propietario.model";
 import {PredioService} from "../../services/PredioService";
 import {Predio} from "../../models/predio.model";
+import {MatButtonModule} from "@angular/material/button";
 
 @Component({
   selector: 'app-datos-propietario',
   standalone: true,
-    imports: [
-        RouterLink
-    ],
+  imports: [
+    RouterLink,
+    MatButtonModule
+  ],
   templateUrl: './datos-propietario.component.html',
   styleUrl: './datos-propietario.component.css'
 })

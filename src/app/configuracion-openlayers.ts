@@ -10,4 +10,11 @@ export class CONFIG_OPENLAYERS {
   public static MAP_DRAW_LINE: Draw;
   public static SOURCE_DRAW: VectorSource = new VectorSource({wrapX: false});
   public static VECTOR_DRAW: VectorLayer<VectorSource> = new VectorLayer({ source: CONFIG_OPENLAYERS.SOURCE_DRAW });
+
+  public static REFERENCE_SYSTEMS = [
+    { code: 'EPSG:4326', name: 'WGS 84' },
+    { code: 'EPSG:3857', name: 'Pseudo-Mercator' },
+    { code: 'EPSG:25830', name: 'ETRS89 / UTM zona 30N' },
+    // ... otros sistemas de referencia
+  ];
 }

@@ -1,6 +1,7 @@
 import {Component, signal} from '@angular/core';
 import {PredioService} from "../services/PredioService";
 import {Router} from "@angular/router";
+import {ApiService} from "../services/ApiService";
 
 @Component({
   selector: 'app-main-screen',
@@ -10,7 +11,7 @@ import {Router} from "@angular/router";
 export class MainScreenComponent {
   prediosMedidos = 0;
 
-  constructor(private predioService: PredioService, private router: Router) {}
+  constructor(private predioService: PredioService, private router: Router, private apiService: ApiService) {}
 
   nuevoPredio() {
     this.predioService.nuevoPredio();
@@ -29,5 +30,16 @@ export class MainScreenComponent {
   borrarTodo() {
     localStorage.clear();
 
+  }
+
+  async enviarAlServidor() {
+    try {
+      const respuesta = await this.apiService.enviarDatosAPI();
+      console.log('Datos enviados con éxito', respuesta);
+      // Aquí puedes manejar la respuesta del servidor
+    } catch (error) {
+      console.error('Error al enviar datos al servidor:', error);
+      // Aquí puedes manejar el error
+    }
   }
 }

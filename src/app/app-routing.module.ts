@@ -17,14 +17,20 @@ import {ImagenesComponent} from "./nuevo-predio/imagenes/imagenes.component";
 import {AddImagenComponent} from "./nuevo-predio/imagenes/add-imagen/add-imagen.component";
 import {EditarImagenComponent} from "./nuevo-predio/imagenes/editar-imagen/editar-imagen.component";
 import {MedirGpsComponent} from "./nuevo-predio/medir-gps/medir-gps.component";
+import {AvanzadoComponent} from "./avanzado/avanzado.component";
+import {EstablecerServidorComponent} from "./avanzado/establecer-servidor/establecer-servidor.component";
+import {SeleccionarGeometriaComponent} from "./nuevo-predio/seleccionar-geometria/seleccionar-geometria.component";
 
 const routes: Routes = [
   {path: '', component: MainScreenComponent, pathMatch: 'full'},
   { path: 'editar-predio-lista', component: EditarPredioListaComponent },
+  { path: 'avanzado', component: AvanzadoComponent },
+  { path: 'avanzado/establecer-servidor', component: EstablecerServidorComponent },
   { path: 'editar-predio/:id', component: EditarPredioComponent },
   { path: 'editar-predio/:id/editar-datos-predio', component: EditarDatosPredioComponent },
   { path: 'editar-datos-predio/:id', component: EditarDatosPredioComponent },
   { path: 'nuevo-predio/:id', component: NuevoPredioComponent},
+  { path: 'nuevo-predio/:id/seleccionar-geometria', component: SeleccionarGeometriaComponent},
   { path: 'nuevo-predio/:id/datos-predio', component: DatosPredioComponent},
   { path: 'nuevo-predio/:id/medir-gps', component: MedirGpsComponent},
   { path: 'nuevo-predio/:id/digitalizar', component: DigitalizarComponent },

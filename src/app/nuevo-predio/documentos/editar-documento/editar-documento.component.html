@@ -14,10 +14,15 @@
     <mat-form-field class="custom-input">
       <textarea matInput placeholder="Notas" [(ngModel)]="documento.notas" name="notas"></textarea>
     </mat-form-field>
+
+    <!-- Input para imágenes -->
+    <input type="file" (change)="onImagenesSelected($event)" multiple accept="image/*">
+
+    <!-- Input para PDFs -->
+    <input type="file" (change)="onPDFsSelected($event)" multiple accept="application/pdf">
   </form>
 
   <button mat-raised-button class="custom-button" (click)="guardarDocumento()">Guardar</button>
   <button mat-raised-button class="custom-button" >Eliminar</button>
-  <!--<button mat-raised-button (click)="eliminarDocumento()">Eliminar</button>-->
   <button mat-raised-button class="custom-button" routerLink='../../'>Atrás</button>
 </div>

@@ -1,17 +1,17 @@
 <div class="container">
   <h1>Editar Predio desde Lista</h1>
-  <div class="listaPredios">
+  <div class="list">
     @for (predio of predios; track predio.id) {
       <!--<div class="predios" (click)="editarPredio(predio.id)">
         {{ predio.id }}
       </div>-->
-      <div class="predios" (click)="editarPredio(predio.id)">
+      <div class="list-item" (click)="editarPredio(predio.id)">
         {{ predio.id }}
       </div>
     }
 
   </div>
-  <div id="botones">
-    <button class="mainBtn" routerLink="../">Atrás</button>
+  <div class="button-container">
+    <button mat-raised-button routerLink="../">Atrás</button>
   </div>
 </div>

@@ -3,7 +3,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100vh;
+  min-height: 100vh;
   background-color: #f0f0f0;
 }
 
@@ -19,7 +19,7 @@ form{
 .custom-input {
   width: 80%;
 }
-
+/*
 .custom-button {
   width: 80%;
   height: 50px;
@@ -33,7 +33,7 @@ form{
   background-color: #1b4c8a;
 }
 
-
+*/
 img {
   height: 300px;
   width: 80%;

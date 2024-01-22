@@ -1,10 +1,10 @@
 <div class="container">
   <h1>Añadir documento</h1>
 
-  <form>
+  <form [formGroup]="documentoForm" (ngSubmit)="guardarDocumento()">
     <mat-form-field class="custom-input">
       <mat-label>Tipo de documento:</mat-label>
-      <mat-select [(ngModel)]="tipo_doc" name="tipo_doc">
+      <mat-select formControlName="tipo_doc">
         @for (tipo of array_tipo_doc; track tipo) {
           <mat-option [value]="tipo">{{tipo}}</mat-option>
         }
@@ -12,12 +12,26 @@
     </mat-form-field>
 
     <mat-form-field class="custom-input">
-      <textarea matInput placeholder="Notas" [(ngModel)]="notas" name="notas"></textarea>
+      <mat-label>Notas:</mat-label>
+      <textarea matInput formControlName="notas"></textarea>
     </mat-form-field>
+
+    <div class="imagenes-container">
+      @for (imagen of listaImagenes; track imagen) {
+        <div class="imagen-wrapper">
+          <img [src]="imagen.ruta" class="imagen-preview" alt="Imagen Capturada">
+          <button type="button" class="eliminar-imagen" (click)="eliminarImagen(imagen.id)">Eliminar</button>
+        </div>
+      }
+    </div>
+
+
+    <input type="file" (change)="onPDFsSelected($event)" multiple accept="application/pdf">
+    <button type="button" (click)="takePhoto()">Tomar Foto</button>
+    <button mat-raised-button class="custom-button" type="submit">Guardar</button>
+    <button mat-raised-button class="custom-button" routerLink='../'>Atrás</button>
+
   </form>
 
-  <button mat-raised-button class="custom-button" (click)="guardarDocumento()">Guardar</button>
-  <button mat-raised-button class="custom-button" >Eliminar</button>
-  <!--<button mat-raised-button (click)="eliminarDocumento()">Eliminar</button>-->
-  <button mat-raised-button class="custom-button" routerLink='../'>Atrás</button>
+
 </div>

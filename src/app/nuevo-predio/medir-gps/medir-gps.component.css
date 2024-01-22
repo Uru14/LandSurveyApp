@@ -1,7 +1,6 @@
 * {
   box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+
 }
 
 #container {
@@ -11,15 +10,16 @@
 }
 #cabecera {
   text-align: center;
-  margin: 20px 0;
+  margin: 5px 0;
 }
 
-#contenedorMapa {
+/*#contenedorMapa {
   height: 80vh;
   border: 2px solid yellow;
   width: 80%;
-}
-
+  margin: 10px;
+}*/
+/*
 .botones{
   width: 100%;
   margin-top: 5px;
@@ -51,7 +51,7 @@
   justify-content: center;
   background-color: #94b7e1;
   color: #fff;
-}
+}*/
 
 .image-container {
   text-align: center;

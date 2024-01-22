@@ -12,6 +12,7 @@ import {MatMenuModule} from "@angular/material/menu";
 import {PropietarioService} from "./services/PropietarioService";
 import {EditarPredioComponent} from "./editar-predio/editar-predio.component";
 import {MedirGpsComponent} from "./nuevo-predio/medir-gps/medir-gps.component";
+import {MatButtonModule} from "@angular/material/button";
 
 @NgModule({
     declarations: [
@@ -22,6 +23,7 @@ import {MedirGpsComponent} from "./nuevo-predio/medir-gps/medir-gps.component";
         MapaComponent,
         EditarPredioComponent,
         MedirGpsComponent,
+
     ],
     imports: [
         BrowserModule,
@@ -29,6 +31,7 @@ import {MedirGpsComponent} from "./nuevo-predio/medir-gps/medir-gps.component";
         MatMenuModule,
         BrowserAnimationsModule,
         HttpClientModule,
+        MatButtonModule,
     ],
     providers: [PropietarioService],
     exports: [

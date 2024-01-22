@@ -3,13 +3,15 @@ import {Router, RouterLink} from "@angular/router";
 import {Imagen} from "../../models/imagen.model";
 import {Predio} from "../../models/predio.model";
 import {PredioService} from "../../services/PredioService";
+import {MatButtonModule} from "@angular/material/button";
 
 @Component({
   selector: 'app-imagenes',
   standalone: true,
-    imports: [
-        RouterLink
-    ],
+  imports: [
+    RouterLink,
+    MatButtonModule
+  ],
   templateUrl: './imagenes.component.html',
   styleUrl: './imagenes.component.css'
 })

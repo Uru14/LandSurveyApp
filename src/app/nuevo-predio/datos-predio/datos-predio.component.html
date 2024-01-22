@@ -1,18 +1,38 @@
 <div class="container">
-  <h1>Datos del predio</h1>
+  <h1>{{ titulo }}</h1>
 
-  <form>
+  <form [formGroup]="datosPredioForm" (ngSubmit)="guardarDatos()">
     <!-- Nombre del Predio -->
     <mat-form-field class="custom-input">
-      <input matInput placeholder="Nombre del Predio" [(ngModel)]="nombre" name="nombre" required>
+      <mat-label>Nombre del Predio</mat-label>
+      <input matInput formControlName="nombre">
+      @if(datosPredioForm.get('nombre')?.invalid){
+        <mat-error>
+          Nombre del predio es obligatorio.
+        </mat-error>
+      }
     </mat-form-field>
 
     <!-- Departamento -->
     <mat-form-field class="custom-input">
       <mat-label>Departamento</mat-label>
-      <mat-select [(ngModel)]="departamentoSeleccionado" name="departamento" (selectionChange)="onDepartamentoChange()">
+      <mat-select formControlName="departamentoSeleccionado" (selectionChange)="onDepartamentoChange()">
         @for (depto of departamentos; track depto) {
-          <mat-option [value]="depto.departamento">{{depto.departamento}}</mat-option>
+          <mat-option [value]="depto.departamento">
+            {{ depto.departamento }}
+          </mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <!-- Provincia -->
+    <mat-form-field class="custom-input">
+      <mat-label>Provincia</mat-label>
+      <mat-select formControlName="provinciaSeleccionada">
+        @for (prov of provincias; track prov) {
+          <mat-option [value]="prov.provincia">
+            {{ prov.provincia }}
+          </mat-option>
         }
       </mat-select>
     </mat-form-field>
@@ -20,8 +40,7 @@
     <!-- Sector del Predio -->
     <mat-form-field class="custom-input">
       <mat-label>Sector</mat-label>
-
-      <mat-select placeholder="Sector del Predio" [(ngModel)]="sectorPredio" name="sectorPredio">
+      <mat-select formControlName="sectorPredio">
         <mat-option value="Norte">Norte</mat-option>
         <mat-option value="Sur">Sur</mat-option>
         <mat-option value="Este">Este</mat-option>
@@ -32,39 +51,46 @@
     <!-- Municipio -->
     <mat-form-field class="custom-input">
       <mat-label>Municipio</mat-label>
-
-      <mat-select [(ngModel)]="municipioSeleccionado" name="municipios">
+      <mat-select formControlName="municipioSeleccionado">
         @for (mun of municipiosFiltrados; track mun) {
-          <mat-option [value]="mun.nombre_municipio">{{mun.nombre_municipio}}</mat-option>
+          <mat-option [value]="mun.nombre_municipio">
+            {{ mun.nombre_municipio }}
+          </mat-option>
         }
       </mat-select>
     </mat-form-field>
 
     <!-- Vereda -->
     <mat-form-field class="custom-input">
-      <input matInput placeholder="Vereda" [(ngModel)]="vereda" name="vereda" required>
+      <mat-label>Vereda</mat-label>
+      <input matInput formControlName="vereda">
     </mat-form-field>
 
     <!-- Número Predial -->
     <mat-form-field class="custom-input">
-      <input matInput placeholder="Número Predial" [(ngModel)]="numeroPredial" name="numeroPredial" required>
+      <mat-label>Número Predial</mat-label>
+      <input matInput formControlName="numeroPredial">
     </mat-form-field>
 
     <!-- Tipo del Predio -->
     <mat-form-field class="custom-input">
-      <mat-select [(ngModel)]="tipo" name="tipo">
+      <mat-label>Tipo del Predio</mat-label>
+      <mat-select formControlName="tipo">
         @for (tipo of array_LC_PredioTipo; track tipo) {
-          <mat-option [value]="tipo">{{tipo}}</mat-option>
+          <mat-option [value]="tipo">
+            {{ tipo }}
+          </mat-option>
         }
       </mat-select>
     </mat-form-field>
 
     <!-- Complemento -->
     <mat-form-field class="custom-input">
-      <textarea matInput placeholder="Complemento" [(ngModel)]="complemento" name="complemento"></textarea>
+      <mat-label>Complemento</mat-label>
+      <textarea matInput formControlName="complemento"></textarea>
     </mat-form-field>
 
-    <button mat-raised-button class="custom-button" (click)="guardarDatos()">Guardar</button>
-    <button mat-raised-button class="custom-button" routerLink='../'>Atrás</button>
+    <button mat-raised-button type="submit" [disabled]="!datosPredioForm.valid">Guardar</button>
+    <button mat-raised-button routerLink='../'>Atrás</button>
   </form>
 </div>

@@ -3,12 +3,14 @@ import {Router, RouterLink} from "@angular/router";
 import {Documento} from "../../models/documento.model";
 import {Predio} from "../../models/predio.model";
 import {PredioService} from "../../services/PredioService";
+import {MatButtonModule} from "@angular/material/button";
 
 @Component({
   selector: 'app-documentos',
   standalone: true,
   imports: [
-    RouterLink
+    RouterLink,
+    MatButtonModule
   ],
   templateUrl: './documentos.component.html',
   styleUrl: './documentos.component.css'

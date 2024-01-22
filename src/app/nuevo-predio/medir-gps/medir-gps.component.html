@@ -5,15 +5,15 @@
     <p>Sitúese sobre el punto del lindero a medir</p>
   </div>
 
-  <div class="contador-puntos">
-    Puntos medidos: {{ puntosMedidos }}
+  <div class="list">
+    <p class="list-item">Puntos medidos: {{ puntosMedidos }}</p>
   </div>
 
-  <div class="botones">
-    <button class="custom-button" (click)="centerMapToMyPosition()">Centrar mapa a mi posición</button>
-    <button class="custom-button" (click)="medirPunto()">Medir punto</button>
-    <button class="custom-button" (click)="borrarUltimoPunto()">Borrar último punto</button>
-    <button class="custom-button" (click)="takePhoto()">Tomar foto del terreno</button>
+  <div class="button-container">
+    <button mat-raised-button  (click)="centerMapToMyPosition()">Centrar mapa a mi posición</button>
+    <button mat-raised-button  (click)="medirPunto()">Medir punto</button>
+    <button mat-raised-button  (click)="borrarUltimoPunto()">Borrar último punto</button>
+    <button mat-raised-button  (click)="takePhoto()">Tomar foto del terreno</button>
   </div>
 
   <div class="image-container" *ngIf="imagenCapturada">
@@ -26,9 +26,9 @@
   </div>
 
 
-  <div class="botones">
-    <button class="custom-button" (click)="finalizarMedicion()">Finalizar</button>
-    <button class="custom-button" routerLink="../">Atrás</button>
+  <div class="button-container">
+    <button mat-raised-button (click)="finalizarMedicion()">Finalizar</button>
+    <button mat-raised-button routerLink="../">Atrás</button>
   </div>
 </div>
 

@@ -9,6 +9,7 @@ import {MatSelectModule} from "@angular/material/select";
 import {PredioService} from "../../../services/PredioService";
 import {Imagen, LC_FuenteAdministrativaTipo} from "../../../models/imagen.model";
 import {ImagenService} from "../../../services/ImagenService";
+import {MatButtonModule} from "@angular/material/button";
 
 @Component({
   selector: 'app-add-imagen',
@@ -20,7 +21,8 @@ import {ImagenService} from "../../../services/ImagenService";
     MatRadioModule,
     RouterLink,
     MatOptionModule,
-    MatSelectModule
+    MatSelectModule,
+    MatButtonModule
   ],
   templateUrl: './add-imagen.component.html',
   styleUrl: './add-imagen.component.css'
