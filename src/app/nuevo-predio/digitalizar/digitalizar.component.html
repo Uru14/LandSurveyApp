@@ -7,8 +7,8 @@
   <div id="dibujar">
     <button mat-button [matMenuTriggerFor]="drawMenu" class="option-buttons">Dibujar</button>
     <mat-menu #drawMenu="matMenu" >
-      <button mat-menu-item (click)="mapDraw.enableDrawPoints()">Punto</button>
-      <button mat-menu-item (click)="mapDraw.enableDrawLine()">Distancia</button>
+      <!--<button mat-menu-item (click)="mapDraw.enableDrawPoints()">Punto</button>
+      <button mat-menu-item (click)="mapDraw.enableDrawLine()">Distancia</button>-->
       <button mat-menu-item (click)="mapDraw.enableDrawPolygons()">Polígono</button>
     </mat-menu>
     <button mat-button class="option-buttons" (click)="mapDraw.disableDrawings()">Parar dibujo</button>

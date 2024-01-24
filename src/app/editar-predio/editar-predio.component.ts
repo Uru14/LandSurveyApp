@@ -8,6 +8,7 @@ import {Modify, Select} from "ol/interaction";
 import {click} from "ol/events/condition";
 import Polygon from "ol/geom/Polygon";
 import { Router } from '@angular/router';
+import {Coordenadas} from "../models/geometria.model";
 
 
 @Component({
@@ -51,9 +52,9 @@ export class EditarPredioComponent implements OnInit{
 
       if (predioSeleccionado ) {
         let coordenadas = predioSeleccionado.geometrias;
-
+        console.log("las coord del predio son: ", coordenadas)
         this.waitForMapInitialization().then(() => {
-          this.agregarCoordenadasAlMapa(this.extraerCoords(coordenadas));
+          this.agregarCoordenadasAlMapa(this.extraerCoords([coordenadas]));
         });
       }
     });
@@ -76,16 +77,34 @@ export class EditarPredioComponent implements OnInit{
     });
   }
 
-  private extraerCoords(coordenadas: any[]) {
+  private extraerCoords(coordenadas: Coordenadas[][]): number[][] {
     let arrayXY = [];
 
-    for(let coords of coordenadas) {
-      let x = coords.x;
-      let y = coords.y;
-      arrayXY.push([x,y]);
+    for (let subArray of coordenadas) {
+      for (let coords of subArray) {
+        console.log("Coordenada actual:", coords);
+
+        let x = Number(coords.x);
+        let y = Number(coords.y);
+
+        console.log("Tipo de X:", typeof x, "X:", x);
+        console.log("Tipo de Y:", typeof y, "Y:", y);
+
+        if (!isNaN(x) && !isNaN(y)) {
+          arrayXY.push([x, y]);
+        } else {
+          console.error("Coordenada no válida:", coords);
+        }
+      }
     }
+
+    console.log("Coordenadas extraídas:", arrayXY);
     return arrayXY;
   }
+
+
+
+
 
   /*private agregarCoordenadasAlMapa(arrayXY: number[][]) {
     // Agrega las coordenadas al mapa
@@ -101,10 +120,10 @@ export class EditarPredioComponent implements OnInit{
       mapDraw.addPolygonToLayer(arrayXY);
       mapDraw.disableDrawings();
 
-      // Crear una extensión que contenga todas las coordenadas
+      // Crea una extensión que contenga todas las coordenadas
       const extent = new Polygon([arrayXY]).getExtent();
 
-      // Hacer zoom al mapa para que se ajuste a la extensión de las coordenadas
+      // Hace zoom al mapa para que se ajuste a la extensión de las coordenadas
       CONFIG_OPENLAYERS.MAP.getView().fit(extent, {
         duration: 1000, // Duración en milisegundos para la animación del zoom
         padding: [50, 50, 50, 50] // Espacio extra alrededor de las coordenadas en píxeles

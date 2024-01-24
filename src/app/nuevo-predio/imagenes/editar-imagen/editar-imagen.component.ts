@@ -12,6 +12,7 @@ import {PredioService} from "../../../services/PredioService";
 import {ImagenService} from "../../../services/ImagenService";
 import {DocTypeEnum} from "../../../models/documento.model";
 import {MatButtonModule} from "@angular/material/button";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-editar-imagen',
@@ -43,7 +44,7 @@ export class EditarImagenComponent {
   }
   imagenIndex = -1;
   predioActual = this.predioService.obtenerPredioActual();
-  constructor(private imagenService: ImagenService, private route: ActivatedRoute, private router: Router, private predioService: PredioService) {
+  constructor(private imagenService: ImagenService, private snackBar: MatSnackBar,private route: ActivatedRoute, private router: Router, private predioService: PredioService) {
 
   }
 
@@ -86,6 +87,7 @@ export class EditarImagenComponent {
       this.predioActual.imagenes[index] = imagenActualizada;
       this.imagenService.actualizarImagen(index, imagenActualizada);
 
+      this.snackBar.open('Imagen guardada con éxito', 'Cerrar', { duration: 3000 });
       this.router.navigate(['/nuevo-predio/', this.predioActual.id, 'imagenes']);
       console.log(this.predioActual)
     } else {
@@ -100,6 +102,7 @@ export class EditarImagenComponent {
     this.predioActual = this.predioService.obtenerPredioActual();
     this.predioActual.imagenes = this.imagenService.getImagenes();
 
+    this.snackBar.open('Imagen eliminada con éxito', 'Cerrar', { duration: 3000 });
 
     this.router.navigate(['/nuevo-predio/', this.predioActual.id, 'imagenes']);
     console.log(this.predioActual);

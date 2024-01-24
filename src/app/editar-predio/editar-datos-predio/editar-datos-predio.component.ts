@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import {ActivatedRoute, Router, RouterLink} from "@angular/router";
 import {PredioService} from "../../services/PredioService";
 import {MatButtonModule} from "@angular/material/button";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-editar-datos-predio',
@@ -16,7 +17,8 @@ import {MatButtonModule} from "@angular/material/button";
 export class EditarDatosPredioComponent {
   titulo: string =  "Editar Predio ";
   predioActual = this.predioService.obtenerPredioActual();
-  constructor(private predioService: PredioService, private router: Router, private route: ActivatedRoute) {
+  predioActualId?: number;
+  constructor(private predioService: PredioService, private router: Router, private route: ActivatedRoute, private snackBar: MatSnackBar) {
 
 
   }
@@ -24,6 +26,7 @@ export class EditarDatosPredioComponent {
   ngOnInit() {
     this.route.params.subscribe(params => {
       const predioId = +params['id'];
+      this.predioActualId = predioId; // Guarda el ID del predio actual
       this.cargarPredio(predioId);
     });
   }
@@ -35,26 +38,28 @@ export class EditarDatosPredioComponent {
       this.titulo += this.predioActual.id;
     } else {
       console.error('Predio no encontrado con ID:', predioId);
-      // Manejar el caso de que el predio no se encuentre
     }
   }
   editarDatosPropietario() {
-    // Obtiene el ID del predio desde los parámetros de la ruta
-    let predioId = +this.route.snapshot.params['id'];
 
-    this.router.navigate(['/nuevo-predio/', predioId, 'datos-propietario'])
+    if (this.predioActualId != null) {
+      this.router.navigate(['/nuevo-predio/', this.predioActualId, 'datos-propietario']);
+    } else {
+      console.error('ID del predio no está definido');
+    }
   }
   editarDatosPredio() {
 
-    let predioId = +this.route.snapshot.params['id'];
-
-    this.router.navigate(['/nuevo-predio/', predioId, 'datos-predio'])
+    if (this.predioActualId != null) {
+      this.router.navigate(['/nuevo-predio/', this.predioActualId, 'datos-predio']);
+    } else {
+      console.error('ID del predio no está definido');
+    }
   }
   guardarPredio() {
-
     this.predioService.guardarPredioActual(this.predioActual);
-
-    console.log(this.predioActual)
-
+    this.snackBar.open('Predio guardado correctamente', 'Cerrar', {
+      duration: 3000
+    });
   }
 }

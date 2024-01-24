@@ -7,7 +7,7 @@ import {Documento} from "../models/documento.model";
 export class DocumentoService {
   private readonly PREFERENCES_KEY = 'listaDocumentos';
   private documentos: Documento[] = [];
-
+  private contadorId = 0;
   private async cargarListaDocumentosDesdeStorage() {
     const listaDocumentosGuardada = await Preferences.get({ key: this.PREFERENCES_KEY });
 
@@ -15,7 +15,10 @@ export class DocumentoService {
       this.documentos = JSON.parse(listaDocumentosGuardada.value);
     }
   }
-
+  obtenerSiguienteId(): number {
+    this.contadorId++;
+    return this.contadorId;
+  }
   actualizarDocumento(index: number, documento: Documento) {
     this.documentos[index] = documento;
     this.guardarListaDocumentosEnStorage();

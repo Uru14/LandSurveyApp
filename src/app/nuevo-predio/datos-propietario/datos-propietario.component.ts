@@ -18,15 +18,31 @@ import {MatButtonModule} from "@angular/material/button";
 })
 export class DatosPropietarioComponent{
 
-  propietarios: Propietario[];
-  predioActual: Predio;
+  propietarios?: Propietario[];
+  predioActual?: Predio;
   constructor(private propietarioService: PropietarioService, private router: Router, private predioService: PredioService, private route: ActivatedRoute,) {
-    this.predioActual = this.predioService.obtenerPredioActual();
-    this.propietarios = this.predioActual.propietarios;
+
+  }
+
+  ngOnInit() {
+    const predioId = +this.route.snapshot.params['id'];
+    const predioEnLista = this.predioService.getListaPredios().find(predio => predio.id === predioId);
+
+    if (predioEnLista) {
+      this.predioActual = predioEnLista;
+    } else {
+      this.predioActual = this.predioService.obtenerPredioActual();
+    }
+
+    this.propietarios = this.predioActual?.propietarios;
   }
 
   editarPropietario(documentoIdentidad: string) {
-    this.router.navigate(['/nuevo-predio/', this.predioActual.id, 'datos-propietario', 'editar-propietario', documentoIdentidad])
+    if (this.predioActual) {
+      this.router.navigate(['/nuevo-predio/', this.predioActual.id, 'datos-propietario', 'editar-propietario', documentoIdentidad]);
+    } else {
+      console.error('No hay predio actual seleccionado');
+    }
   }
-
 }
+

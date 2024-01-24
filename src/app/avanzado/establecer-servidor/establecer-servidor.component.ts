@@ -8,6 +8,7 @@ import {MatInputModule} from "@angular/material/input";
 import {FormsModule} from "@angular/forms";
 import {RouterLink} from "@angular/router";
 import {MatButtonModule} from "@angular/material/button";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-establecer-servidor',
@@ -25,31 +26,35 @@ import {MatButtonModule} from "@angular/material/button";
   styleUrl: './establecer-servidor.component.css'
 })
 export class EstablecerServidorComponent {
-  apiUrl: string = '';
+  apiUrl: string = 'https://metatierrascol.upvusig.car.upv.es/api/';
   user: string = '';
   password: string = '';
 
-  constructor(private apiService: ApiService) {}
+  constructor(private apiService: ApiService, private snackBar: MatSnackBar) {}
 
   async establecerServidor() {
-    // Guardar las credenciales
+    // Guarda las credenciales
     await Preferences.set({ key: 'apiUrl', value: this.apiUrl });
     await Preferences.set({ key: 'user', value: this.user });
     await Preferences.set({ key: 'password', value: this.password });
 
     console.log('Configuración guardada:', this.apiUrl, this.user, this.password);
 
-    // Llamar a cargarConfiguracion y luego autenticar
+    // Llama a cargarConfiguracion y luego autenticar
     this.apiService.cargarConfiguracion().then(() => {
       this.apiService.autenticar().then(token => {
         console.log('Token recibido:', token);
+        this.snackBar.open('Autenticación exitosa. Token recibido.', 'Cerrar', {
+          duration: 3000
+        });
       }).catch(error => {
-      console.error('Error en la autenticación:', error);
+        console.error('Error en la autenticación:', error);
+        this.snackBar.open('Error en la autenticación. Por favor, revisa tus credenciales.', 'Cerrar', {
+          duration: 3000
+        });
       });
     });
 
   }
-
-
 
 }

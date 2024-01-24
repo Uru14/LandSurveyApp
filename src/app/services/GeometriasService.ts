@@ -10,13 +10,29 @@ export class GeometriasService {
 
   constructor() {}
 
-  crearCoordenadas(x: number, y: number): Coordenadas {
-    return new Coordenadas(x, y);
+  crearCoordenadas(x: number, y: number, precisionX: number = 5, precisionY: number = 5): Coordenadas {
+    return new Coordenadas(x, y, precisionX, precisionY);
   }
 
-  mapearCoordenadasPoligono(coordinates: number[][]): Coordenadas[] {
+
+  /*mapearCoordenadasPoligono(coordinates: number[][]): Coordenadas[] {
     return coordinates.map(coord => this.crearCoordenadas(coord[0], coord[1]));
+  }*/
+
+  mapearCoordenadasPoligono(coordinates: number[][]): Coordenadas[] {
+    let contador = 1;
+    return coordinates.map(coord => {
+      // Asigna la precisión estándar para digitalización manual
+      const precisionX = 10; // Ajusta según tu criterio
+      const precisionY = 10; // Ajusta según tu criterio
+
+      // Crea un objeto Coordenadas con el contador como número de coordenada
+      const coordenada = new Coordenadas(coord[0], coord[1], precisionX, precisionY, contador);
+      contador++;
+      return coordenada;
+    });
   }
+
 
   agregarGeometria(coordenadas: Coordenadas[]) {
     this.geometria.push(...coordenadas);

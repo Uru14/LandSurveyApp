@@ -20,9 +20,11 @@ import {MedirGpsComponent} from "./nuevo-predio/medir-gps/medir-gps.component";
 import {AvanzadoComponent} from "./avanzado/avanzado.component";
 import {EstablecerServidorComponent} from "./avanzado/establecer-servidor/establecer-servidor.component";
 import {SeleccionarGeometriaComponent} from "./nuevo-predio/seleccionar-geometria/seleccionar-geometria.component";
+import {PantallaInicialComponent} from "./pantalla-inicial/pantalla-inicial.component";
 
 const routes: Routes = [
-  {path: '', component: MainScreenComponent, pathMatch: 'full'},
+  { path: '', component: PantallaInicialComponent },
+  { path: 'main', component: MainScreenComponent, pathMatch: 'full'},
   { path: 'editar-predio-lista', component: EditarPredioListaComponent },
   { path: 'avanzado', component: AvanzadoComponent },
   { path: 'avanzado/establecer-servidor', component: EstablecerServidorComponent },

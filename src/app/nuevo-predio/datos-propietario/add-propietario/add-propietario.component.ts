@@ -12,6 +12,7 @@ import { DataService } from '../../../services/DataService';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import {Departamento, Municipio} from "../../../models/propietario.model";
 import {MatButtonModule} from "@angular/material/button";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-add-propietario',
@@ -58,7 +59,7 @@ export class AddPropietarioComponent {
   estado: Estado = Estado.Soltero;
 
 
-  constructor(private propietarioService: PropietarioService, private router: Router, private predioService: PredioService, private dataService: DataService) {
+  constructor(private propietarioService: PropietarioService, private router: Router, private predioService: PredioService, private dataService: DataService, private snackBar: MatSnackBar) {
     // Inicializa el FormGroup dentro del constructor
     this.formulario = new FormGroup({
       tipoDocumento: new FormControl('', Validators.required),
@@ -101,9 +102,7 @@ export class AddPropietarioComponent {
     this.formulario.get('municipioSeleccionado')!.setValue('');
   }
   guardarPropietario() {
-    // 1. Validar el formulario
     if (this.formulario.valid) {
-      // 2. Crear un objeto Propietario con los datos del formulario
       const nuevoPropietario = new Propietario(
         this.formulario.value.autorizaProcesamientoDatosPersonales,
         this.formulario.value.tipo,
@@ -125,25 +124,22 @@ export class AddPropietarioComponent {
         this.formulario.value.estado
       );
 
-      // 3. Comprobar si el documento de identidad ya existe
       if (!this.propietarioService.documentoIdentidadExists(this.formulario.value.documentoIdentidad)) {
-        // 4. Guardar el propietario
         this.propietarioService.addPropietario(nuevoPropietario);
 
-        // 5. Actualizar el predio actual
         let predioActual = this.predioService.obtenerPredioActual();
+        console.log("el id del predio actual es: ", predioActual.id);
         predioActual.propietarios.push(nuevoPropietario);
         console.log(predioActual);
 
-        // Navegar a la siguiente página
+        this.snackBar.open('Propietario agregado con éxito', 'Cerrar', { duration: 3000 });
+
         this.router.navigate(['/nuevo-predio/' , predioActual.id, 'datos-propietario']);
       } else {
-        // Manejar el caso de documento de identidad duplicado
         alert('Documento de identidad duplicado');
       }
     } else {
-      // Manejar el caso de formulario no válido
-      alert('Por favor, completa todos los campos requeridos.');
+      this.snackBar.open('Por favor, completa todos los campos requeridos', 'Cerrar', { duration: 3000 });
     }
   }
 

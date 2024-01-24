@@ -11,6 +11,7 @@ import {PredioService} from "../../../services/PredioService";
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import {ImagenService} from "../../../services/ImagenService";
 import {MatButtonModule} from "@angular/material/button";
+import {MatSnackBar} from "@angular/material/snack-bar";
 @Component({
   selector: 'app-add-documento',
   standalone: true,
@@ -33,7 +34,7 @@ export class AddDocumentoComponent {
   listaImagenes: { id: number; ruta: string }[] = [];
   array_tipo_doc = Object.values(DocTypeEnum);
   predioActual = this.predioService.obtenerPredioActual();
-  constructor(private documentoService: DocumentoService, private predioService: PredioService, private router: Router, private imagenService: ImagenService) {
+  constructor(private documentoService: DocumentoService, private predioService: PredioService, private router: Router, private imagenService: ImagenService, private snackBar: MatSnackBar) {
     this.documentoForm = new FormGroup({
       tipo_doc: new FormControl(DocTypeEnum.Declaracion, Validators.required),
       notas: new FormControl(''),
@@ -51,7 +52,6 @@ export class AddDocumentoComponent {
         });
 
       } else {
-        // Manejar el caso donde capturedPhoto.webPath es undefined
         console.error('No se pudo capturar la foto.');
       }
     });
@@ -73,22 +73,24 @@ export class AddDocumentoComponent {
   guardarDocumento() {
     if (this.documentoForm.valid) {
       const rutasImagenes = this.listaImagenes.map(imagen => imagen.ruta);
-
+      const idDocumento = this.documentoService.obtenerSiguienteId();
       const nuevoDocumento = new Documento(
+        idDocumento,
         this.documentoForm.value.tipo_doc,
         this.documentoForm.value.notas,
         rutasImagenes,
         this.documentoForm.value.pdfs
       );
 
-      // Procesos de guardado
       this.documentoService.addDocumento(nuevoDocumento);
       this.predioActual.documentos.push(nuevoDocumento);
+
+      this.snackBar.open('Documento guardado con éxito', 'Cerrar', { duration: 3000 });
 
       // Navegar a otra ruta
       this.router.navigate(['/nuevo-predio/', this.predioActual.id, 'documentos']);
     } else {
-      alert('Por favor, completa todos los campos requeridos.');
+      this.snackBar.open('Por favor, completa todos los campos requeridos', 'Cerrar', { duration: 3000 });
     }
   }
 

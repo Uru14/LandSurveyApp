@@ -10,6 +10,7 @@ import {DocumentoService} from "../../../services/DocumentoService";
 import {PredioService} from "../../../services/PredioService";
 import {ImagenService} from "../../../services/ImagenService";
 import {MatButtonModule} from "@angular/material/button";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-editar-documento',
@@ -32,15 +33,16 @@ export class EditarDocumentoComponent {
   notas = '';
   tipo_doc = DocTypeEnum.DNI;
   documento: Documento = {
+    id: 0,
     tipo_doc: DocTypeEnum.DNI,
     notas: '',
-    imagenes: [] || [], // Inicializar como un arreglo vacío
-    pdfs: [] || []// Inicializar como un arreglo vacío
+    imagenes: [] || [],
+    pdfs: [] || []
   };
   predioActual = this.predioService.obtenerPredioActual();
   documentoIndex = -1;
 
-  constructor(private documentoService: DocumentoService, private route: ActivatedRoute, private predioService: PredioService, private router: Router, private imagenService: ImagenService) {
+  constructor(private documentoService: DocumentoService, private snackBar: MatSnackBar, private route: ActivatedRoute, private predioService: PredioService, private router: Router, private imagenService: ImagenService) {
   }
 
   ngOnInit() {
@@ -78,23 +80,29 @@ export class EditarDocumentoComponent {
 
   guardarDocumento() {
     if (this.documentoIndex !== -1) {
+      this.documento.id = this.predioActual.documentos[this.documentoIndex].id;
       this.predioActual.documentos[this.documentoIndex] = this.documento;
       this.documentoService.actualizarDocumento(this.documentoIndex, this.documento);
+
+      this.snackBar.open('Documento actualizado con éxito', 'Cerrar', { duration: 3000 });
+
       this.router.navigate(['/nuevo-predio/', this.predioActual.id, 'documentos']);
     } else {
-      console.error('Error al actualizar el documento.');
+      this.snackBar.open('Error al actualizar el documento', 'Cerrar', { duration: 3000 });
     }
   }
 
   eliminarImagen(index: number): void {
     if (index >= 0 && index < this.documento.imagenes.length) {
       this.documento.imagenes.splice(index, 1);
+      this.snackBar.open('Imagen eliminada con éxito', 'Cerrar', { duration: 3000 });
     }
   }
 
   eliminarPDF(index: number): void {
     if (index >= 0 && index < this.documento.pdfs.length) {
       this.documento.pdfs.splice(index, 1);
+      this.snackBar.open('PDF eliminado con éxito', 'Cerrar', { duration: 3000 });
     }
   }
 

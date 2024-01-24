@@ -10,6 +10,7 @@ import {PredioService} from "../../../services/PredioService";
 import {Imagen, LC_FuenteAdministrativaTipo} from "../../../models/imagen.model";
 import {ImagenService} from "../../../services/ImagenService";
 import {MatButtonModule} from "@angular/material/button";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-add-imagen',
@@ -35,7 +36,7 @@ export class AddImagenComponent {
   imagen?: Imagen;
   imagenCapturada: string | undefined = '';
   predioActual = this.predioService.obtenerPredioActual();
-  constructor(private imagenService: ImagenService, private predioService: PredioService, private router: Router) {
+  constructor(private imagenService: ImagenService, private predioService: PredioService, private router: Router, private snackBar: MatSnackBar) {
     this.tipo_doc = LC_FuenteAdministrativaTipo.Imagen_propietario;
     this.notas = '';
     this.num_pag = 0;
@@ -66,6 +67,7 @@ export class AddImagenComponent {
     this.notas = '';
     this.num_pag = 0;
     this.imagenCapturada = '';
+    this.snackBar.open('Imagen guardada con éxito', 'Cerrar', { duration: 3000 });
     this.router.navigate(['/nuevo-predio/', this.predioActual.id, 'imagenes']);
   }
 }

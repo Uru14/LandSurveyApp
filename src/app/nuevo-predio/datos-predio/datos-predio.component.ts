@@ -12,6 +12,7 @@ import {DataService} from "../../services/DataService";
 import {Departamento, Municipio, Provincia} from "../../models/propietario.model";
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import {MatButtonModule} from "@angular/material/button";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-datos-predio',
@@ -49,30 +50,31 @@ export class DatosPredioComponent {
   titulo: string =  "Datos del Predio ";
   predioActual = this.predioService.obtenerPredioActual();
 
-  constructor(private datosPredioService: DatosPredioService, private router: Router, private dataService: DataService, private predioService: PredioService, private route: ActivatedRoute) {
+  constructor(private datosPredioService: DatosPredioService, private router: Router, private dataService: DataService, private predioService: PredioService, private route: ActivatedRoute, private snackBar: MatSnackBar) {
     this.datosPredioForm = new FormGroup({
       nombre: new FormControl('', Validators.required),
-      sectorPredio: new FormControl(''),
+      sectorPredio: new FormControl('', Validators.required),
       departamentoSeleccionado: new FormControl('', Validators.required),
       provinciaSeleccionada: new FormControl('', Validators.required),
       municipioSeleccionado: new FormControl('', Validators.required),
       vereda: new FormControl('', Validators.required),
-      numeroPredial: new FormControl(''),
+      numeroPredial: new FormControl(''), // Opcional, sin validadores
       tipo: new FormControl('', Validators.required),
-      complemento: new FormControl('') // Opcional, sin validadores
+      complemento: new FormControl('', Validators.required)
     });
   }
 
 
   ngOnInit() {
-    Promise.all([
-      this.cargarDepartamentosYMunicipios()
-    ]).then(() => {
-      this.cargarDatosDelPredio();
+    this.route.params.subscribe(params => {
+      const predioId = +params['id'];
+      this.cargarDepartamentosYMunicipios().then(() => {
+        this.cargarDatosDelPredio(predioId);
+      });
     });
-    this.titulo += this.predioActual.id;
-
   }
+
+
 
   cargarDepartamentosYMunicipios(): Promise<void> {
     const departamentosPromise = this.dataService.getDepartamentos().toPromise().then(data => {
@@ -88,19 +90,29 @@ export class DatosPredioComponent {
     });
 
     return Promise.all([departamentosPromise, municipiosPromise, provinciasPromise]).then(() => {});
-    console.log(departamentosPromise, municipiosPromise, provinciasPromise);
   }
 
-  cargarDatosDelPredio() {
-    const idPredio = this.route.snapshot.params['id'];
-    if (idPredio) {
+  cargarDatosDelPredio(predioId: number) {
+    // Intenta encontrar el predio en la lista guardada primero
+    const predioEncontrado = this.predioService.getListaPredios().find(predio => predio.id === predioId);
+
+    // Si no se encuentra, usa el predio actual
+    if (!predioEncontrado) {
       this.predioActual = this.predioService.obtenerPredioActual();
-      if (this.predioActual && this.predioActual.datosPredio) {
-        this.inicializarFormularioConDatos(this.predioActual.datosPredio);
-      }
+    } else {
+      this.predioActual = predioEncontrado;
     }
+
+    if (this.predioActual && this.predioActual.datosPredio) {
+      this.inicializarFormularioConDatos(this.predioActual.datosPredio);
+    } else {
+      console.error('Predio no encontrado con ID:', predioId);
+    }
+
     this.onDepartamentoChange();
   }
+
+
 
   inicializarFormularioConDatos(datosPredio: DatosPredio) {
     this.datosPredioForm.patchValue({
@@ -119,13 +131,28 @@ export class DatosPredioComponent {
   }
   onDepartamentoChange() {
     const deptoSeleccionado = this.datosPredioForm.get('departamentoSeleccionado')?.value;
+
+    // Filtra municipios basados en el departamento seleccionado
     this.municipiosFiltrados = this.municipios.filter(m => m.departamento === deptoSeleccionado);
 
-    // Restablecer el municipio seleccionado si no está en los municipios filtrados
+    // Obtiene los nombres de las provincias correspondientes a los municipios filtrados
+    const nombresProvinciasDeMunicipiosFiltrados = this.municipiosFiltrados.map(m => m.provincia);
+
+    // Elimina duplicados de nombres de provincias
+    const nombresProvinciasUnicas = nombresProvinciasDeMunicipiosFiltrados.filter((nombreProvincia, index, array) => array.indexOf(nombreProvincia) === index);
+
+    // Filtra el arreglo completo de provincias basándonos en los nombres únicos
+    this.provinciasFiltradas = this.provincias.filter(provincia => nombresProvinciasUnicas.includes(provincia.provincia));
+
+    // Restablece el municipio y la provincia seleccionada si no están en las listas filtradas
     if (!this.municipiosFiltrados.some(m => m.nombre_municipio === this.municipioSeleccionado)) {
       this.datosPredioForm.get('municipioSeleccionado')?.setValue('');
     }
+    if (!this.provinciasFiltradas.some(p => p.provincia === this.provinciaSeleccionada)) {
+      this.datosPredioForm.get('provinciaSeleccionada')?.setValue('');
+    }
   }
+
 
 
   guardarDatos() {
@@ -142,22 +169,17 @@ export class DatosPredioComponent {
         this.datosPredioForm.value.complemento
       );
 
-      // Proceso de guardado, por ejemplo:
       this.predioActual.datosPredio = datosPredio;
       this.datosPredioService.addDatosPredio(datosPredio);
 
       console.log(this.datosPredioService.getDatosPredio());
       console.log(this.predioActual);
+      this.snackBar.open('Datos del predio guardados con éxito', 'Cerrar', { duration: 3000 });
 
       this.router.navigate(['/nuevo-predio/' , this.predioActual.id])
     } else {
-      // Manejar la situación cuando el formulario no es válido
-      alert('Por favor, completa todos los campos requeridos.');
+      this.snackBar.open('Por favor, completa todos los campos requeridos', 'Cerrar', { duration: 3000 });
     }
   }
-
-
-
-
 
 }

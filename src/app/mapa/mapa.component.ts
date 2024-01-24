@@ -96,7 +96,7 @@ export class MapaComponent implements OnInit {
     const currentView = CONFIG_OPENLAYERS.MAP.getView();
     const currentProjection = currentView.getProjection().getCode();
 
-    // Imprimir la proyección actual antes del cambio
+    // Imprime la proyección actual antes del cambio
     console.log('Proyección actual:', currentProjection);
     this.dataService.src$.subscribe(newSrc => {
       const currentView = CONFIG_OPENLAYERS.MAP.getView();

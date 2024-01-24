@@ -29,7 +29,7 @@
     <mat-form-field class="custom-input">
       <mat-label>Provincia</mat-label>
       <mat-select formControlName="provinciaSeleccionada">
-        @for (prov of provincias; track prov) {
+        @for (prov of provinciasFiltradas; track prov) {
           <mat-option [value]="prov.provincia">
             {{ prov.provincia }}
           </mat-option>

@@ -18,6 +18,8 @@ import {MatSelectModule} from "@angular/material/select";
 import {MatCheckboxModule} from "@angular/material/checkbox";
 import {DataService} from "../../../services/DataService";
 import {MatButtonModule} from "@angular/material/button";
+import {Predio} from "../../../models/predio.model";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-editar-propietario',
@@ -39,7 +41,7 @@ import {MatButtonModule} from "@angular/material/button";
 export class EditarPropietarioComponent {
   editarFormulario: FormGroup;
   titulo: string = 'Editar interesado ';
-  predioActual = this.predioService.obtenerPredioActual();
+  predioActual!: Predio | null;
   propietario!: Propietario;
   originalDocumentoIdentidad = '';
   array_CR_InteresadoTipo = Object.values(CR_InteresadoTipo);
@@ -67,7 +69,7 @@ export class EditarPropietarioComponent {
   notas: string = '';
   porcentajePropiedad: number = 0;
   estado: Estado = Estado.Soltero;
-  constructor(private propietarioService: PropietarioService, private dataService: DataService, private route: ActivatedRoute, private router: Router, private predioService: PredioService) {
+  constructor(private propietarioService: PropietarioService, private snackBar: MatSnackBar, private dataService: DataService, private route: ActivatedRoute, private router: Router, private predioService: PredioService) {
     this.editarFormulario = new FormGroup({
       tipoDocumento: new FormControl('', Validators.required),
       documentoIdentidad: new FormControl('', [Validators.required, Validators.minLength(4)]),
@@ -94,9 +96,8 @@ export class EditarPropietarioComponent {
     Promise.all([
       this.cargarDepartamentosYMunicipios()
     ]).then(() => {
-      this.cargarDatosPropietario();
+      this.cargarDatosPropietarioDesdeRuta();
     });
-
   }
 
   cargarDepartamentosYMunicipios(): Promise<void> {
@@ -110,19 +111,28 @@ export class EditarPropietarioComponent {
 
     return Promise.all([departamentosPromise, municipiosPromise]).then(() => {});
   }
-  cargarDatosPropietario() {
-    const idPredio = this.route.snapshot.params['id'];
+  private cargarDatosPropietarioDesdeRuta() {
+    const idPredio = +this.route.snapshot.params['id'];
     const documentoIdentidad = this.route.snapshot.params['documentoIdentidad'];
 
-    if (idPredio && documentoIdentidad) {
-      if (this.predioActual) {
-        const propietarioEncontrado = this.predioActual.propietarios.find(p => p.documentoIdentidad === documentoIdentidad);
-        if (propietarioEncontrado) {
-          console.log(propietarioEncontrado);
-          this.propietario = propietarioEncontrado;
-          this.originalDocumentoIdentidad = propietarioEncontrado.documentoIdentidad; // Almacenar el valor original
-          // Asignar los valores al formulario
-          this.editarFormulario.patchValue({
+    // Intenta encontrar el predio en la lista guardada primero
+    const predioEncontrado = this.predioService.getListaPredios().find(predio => predio.id === idPredio);
+
+    // Si no se encuentra, usa el predio actual
+    if (!predioEncontrado) {
+      this.predioActual = this.predioService.obtenerPredioActual();
+    } else {
+      this.predioActual = predioEncontrado;
+    }
+
+    if (this.predioActual && documentoIdentidad) {
+      // Busca y carga el propietario
+      const propietarioEncontrado = this.predioActual.propietarios.find(p => p.documentoIdentidad === documentoIdentidad);
+      if (propietarioEncontrado) {
+        this.propietario = propietarioEncontrado;
+        this.originalDocumentoIdentidad = propietarioEncontrado.documentoIdentidad;
+        // Asigna valores al formulario
+        this.editarFormulario.patchValue({
             tipoDocumento: propietarioEncontrado.tipoDocumento,
             documentoIdentidad: propietarioEncontrado.documentoIdentidad,
             tipo: propietarioEncontrado.tipo,
@@ -141,14 +151,14 @@ export class EditarPropietarioComponent {
             autorizaProcesamientoDatosPersonales: propietarioEncontrado.autorizaProcesamientoDatosPersonales,
             autorizaNotificacionCorreo: propietarioEncontrado.autorizaNotificacionCorreo,
             notas: propietarioEncontrado.notas
-          });
+        });
 
-          // Llama a onDepartamentoChange para actualizar los municipios filtrados
-          this.onDepartamentoChange();
-        }
+        // Llama a onDepartamentoChange para actualizar los municipios filtrados
+        this.onDepartamentoChange();
       }
     }
   }
+
 
   guardarPropietario() {
     if (this.editarFormulario.valid) {
@@ -165,18 +175,23 @@ export class EditarPropietarioComponent {
       // Realiza la actualización del propietario
       this.propietarioService.actualizarPropietario(this.propietario);
 
-      // Actualizar la lista de propietarios en el predio actual
-      const indice = this.predioActual.propietarios.findIndex(p => p.documentoIdentidad === this.originalDocumentoIdentidad);
-      if (indice !== -1) {
-        this.predioActual.propietarios[indice] = this.propietario;
+      if (this.predioActual) {
+        // Actualiza la lista de propietarios en el predio actual
+        const indice = this.predioActual.propietarios.findIndex(p => p.documentoIdentidad === this.originalDocumentoIdentidad);
+        if (indice !== -1) {
+          this.predioActual.propietarios[indice] = this.propietario;
+        }
+      } else {
+        console.error('No hay predio actual para actualizar');
+        return;
       }
       console.log(this.predioActual);
       console.log(this.propietario);
 
-      // Navegación tras la actualización
+      this.snackBar.open('Propietario actualizado con éxito', 'Cerrar', { duration: 3000 });
       this.router.navigate(['/nuevo-predio/', this.predioService.obtenerPredioActual().id, 'datos-propietario']);
     } else {
-      alert('Por favor, completa todos los campos requeridos.');
+      this.snackBar.open('Por favor, completa todos los campos requeridos', 'Cerrar', { duration: 3000 });
     }
   }
 

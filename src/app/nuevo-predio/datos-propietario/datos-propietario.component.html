@@ -4,8 +4,15 @@
   Click sobre el interesados para editarlo
   </p>
   <div class="list">
-    @for (propietario of propietarios; track propietario.documentoIdentidad) {
+    <!--@for (propietario of propietarios; track propietario.documentoIdentidad) {
       <div class="list-item" (click)="editarPropietario(propietario.documentoIdentidad)">{{propietario.documentoIdentidad}}</div>
+    }-->
+    @if (propietarios && propietarios.length > 0) {
+      @for (propietario of propietarios; track propietario.documentoIdentidad) {
+        <div class="list-item" (click)="editarPropietario(propietario.documentoIdentidad)">{{propietario.documentoIdentidad}}</div>
+      }
+    } @else {
+      <p>No hay propietarios para este predio.</p>
     }
   </div>
 

@@ -18,7 +18,7 @@ export class EditarPredioListaComponent {
   constructor(private predioService: PredioService, private router: Router) {}
 
   ngOnInit() {
-    // Obtener la lista de predios disponibles
+    // Obtiene la lista de predios disponibles
     this.predios = this.predioService.getListaPredios();
     console.log(this.predios)
   }

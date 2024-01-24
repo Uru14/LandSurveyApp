@@ -7,6 +7,7 @@ import Feature from 'ol/Feature.js';
 import {GeometriasService} from "../../services/GeometriasService";
 import Polygon from 'ol/geom/Polygon.js';
 import {Router} from "@angular/router";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 
 @Component({
@@ -19,18 +20,17 @@ export class DigitalizarComponent implements OnInit{
 
   protected readonly mapDraw = mapDraw;
   protected readonly map = map;
-  constructor(private predioService: PredioService, private geometriaService: GeometriasService, private router: Router) {
+  constructor(private predioService: PredioService, private geometriaService: GeometriasService, private router: Router, private snackBar: MatSnackBar) {
   }
 
   ngOnInit(): void {
     let predioActual = this.predioService.obtenerPredioActual();
 
-    // Verificar si hay geometrías existentes
     if (predioActual && predioActual.geometrias.length > 0) {
       if (window.confirm("Hay geometrías dibujadas para este predio. ¿Desea eliminarlas?")) {
         this.geometriaService.limpiarGeometrias();
         predioActual.geometrias = [];
-        mapDraw.clearVectorLayer(); // Limpiar solo si el usuario confirma que quiere eliminarlas
+        mapDraw.clearVectorLayer();
       }
     } else {
       mapDraw.clearVectorLayer();
@@ -60,9 +60,11 @@ export class DigitalizarComponent implements OnInit{
     console.log(this.geometriaService.obtenerGeometrias());
     let coordenadas = this.geometriaService.obtenerGeometrias()
     for(let coord of coordenadas) {
+      coord.precisionX = 5;
+      coord.precisionY = 5;
       predioActual.geometrias.push(coord)
-
     }
+    this.snackBar.open('Geometría guardada con éxito', 'Cerrar', { duration: 3000 });
     console.log(predioActual.geometrias)
     mapDraw.disableDrawings();
     this.router.navigate(['/nuevo-predio/',predioActual.id]);

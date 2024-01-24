@@ -29,9 +29,9 @@ export class AvanzadoComponent {
   constructor(private dataService: DataService, private router: Router) {
   }
   goBack() {
-    this.router.navigate(['/']); // O la ruta que necesites
+    this.router.navigate(['/main']);
   }
-  onRefSystemChange(newRefSystem: string) {
+  /*onRefSystemChange(newRefSystem: string) {
     this.dataService.setSrc(newRefSystem);
-  }
+  }*/
 }

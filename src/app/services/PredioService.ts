@@ -3,18 +3,22 @@ import { Predio } from '../models/predio.model';
 import {Coordenadas} from "../models/geometria.model";
 import { Preferences } from '@capacitor/preferences';
 import {ActivatedRoute} from "@angular/router";
+import {Subscription} from "rxjs";
 @Injectable({
   providedIn: 'root',
 })
 
 export class PredioService {
-  //private contadorIds: number = 1;
-  //private predioActual: Predio = new Predio(this.contadorIds,[], null, [], [], []);
+  private routeParamsSubscription: Subscription;
   private predioActual: Predio = new Predio(0,[], null, [], [], []);
   private listaPredios: Predio[] = [];
   private readonly PREFERENCES_KEY = 'listaPredios';
   constructor(private route: ActivatedRoute) {
     this.cargarListaPredios();
+    this.routeParamsSubscription = this.route.params.subscribe(params => {
+      const predioId = +params['id'];
+      this.setPredioActualById(predioId);
+    });
   }
 
   nuevoPredio() {
@@ -22,14 +26,23 @@ export class PredioService {
     this.predioActual = new Predio(0,[],null,[],[],[]);
   }
 
-  obtenerPredioActual(){
+  setPredioActualById(predioId: number) {
+    const actPredio = this.listaPredios.find(predio => predio.id === predioId);
+    if (actPredio) {
+      this.predioActual = actPredio;
+    }
+  }
+  obtenerPredioActual(): Predio {
     let predioId = +this.route.snapshot.params['id'];
     let actPredio = this.listaPredios.find((predio) => predio.id === predioId);
+
     if (actPredio) {
-      this.predioActual = actPredio
+      return actPredio;
+    } else {
+      return this.predioActual;
     }
-    return this.predioActual;
   }
+
 
   guardarPredioActual(predio: Predio) {
     this.predioActual = predio;
@@ -82,4 +95,7 @@ export class PredioService {
   }
 
 
+  ngOnDestroy() {
+    this.routeParamsSubscription.unsubscribe();
+  }
 }
