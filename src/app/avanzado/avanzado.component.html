@@ -13,10 +13,10 @@
     </mat-select>-->
   </mat-form-field>
   <div class="button-container">
-    <button mat-raised-button routerLink="/configurar-servicio-wms">Añadir servicio WMS</button>
+    <button mat-raised-button [disabled]="true" routerLink="/configurar-servicio-wms">Añadir servicio WMS</button>
     <button mat-raised-button routerLink="establecer-servidor">Establecer servidor</button>
-    <button mat-raised-button routerLink="/descargar-cartografia">Descargar cartografía para trabajo offline</button>
-    <button mat-raised-button >Borrar todos los datos del móvil</button>
+    <button mat-raised-button [disabled]="true" routerLink="/descargar-cartografia">Descargar cartografía para trabajo offline</button>
+    <button mat-raised-button [disabled]="true" >Borrar todos los datos del móvil</button>
     <button mat-raised-button (click)="goBack()">Atrás</button>
   </div>
 </div>

@@ -8,7 +8,7 @@ import {GeometriasService} from "../../services/GeometriasService";
 import Polygon from 'ol/geom/Polygon.js';
 import {Router} from "@angular/router";
 import {MatSnackBar} from "@angular/material/snack-bar";
-
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-digitalizar',
@@ -27,13 +27,25 @@ export class DigitalizarComponent implements OnInit{
     let predioActual = this.predioService.obtenerPredioActual();
 
     if (predioActual && predioActual.geometrias.length > 0) {
-      if (window.confirm("Hay geometrías dibujadas para este predio. ¿Desea eliminarlas?")) {
-        this.geometriaService.limpiarGeometrias();
-        predioActual.geometrias = [];
-        mapDraw.clearVectorLayer();
-      }
+      Swal.fire({
+        title: 'Confirmación',
+        text: "Hay geometrías dibujadas para este predio. ¿Desea eliminarlas?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sí',
+        cancelButtonText: 'No'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.geometriaService.limpiarGeometrias();
+          predioActual.geometrias = [];
+          mapDraw.clearVectorLayerDigital();
+          mapDraw.clearVectorLayerGPS();        }
+      });
     } else {
-      mapDraw.clearVectorLayer();
+      mapDraw.clearVectorLayerDigital();
+      mapDraw.clearVectorLayerGPS();
     }
   }
   finalizar() {
@@ -42,7 +54,7 @@ export class DigitalizarComponent implements OnInit{
 
     this.geometriaService.limpiarGeometrias();
 
-    CONFIG_OPENLAYERS.SOURCE_DRAW.getFeatures().forEach((feature: Feature) => {
+    CONFIG_OPENLAYERS.SOURCE_DRAW_DIGITAL.getFeatures().forEach((feature: Feature) => {
       let geometry = feature.getGeometry();
       if (geometry instanceof Polygon) {
         let coordinates = geometry.getCoordinates()[0];
@@ -62,11 +74,23 @@ export class DigitalizarComponent implements OnInit{
     for(let coord of coordenadas) {
       coord.precisionX = 5;
       coord.precisionY = 5;
+      coord.origen = "digitalizada";
       predioActual.geometrias.push(coord)
     }
     this.snackBar.open('Geometría guardada con éxito', 'Cerrar', { duration: 3000 });
     console.log(predioActual.geometrias)
     mapDraw.disableDrawings();
     this.router.navigate(['/nuevo-predio/',predioActual.id]);
+  }
+
+  limpiarMapaYPredio() {
+    mapDraw.clearVectorLayerDigital();
+    let predioActual = this.predioService.obtenerPredioActual();
+
+    // Filtra y mantiene solo las geometrías que no son digitales
+    predioActual.geometrias = predioActual.geometrias.filter(geom => geom.origen !== 'digitalizada');
+
+    // Guarda el predio actualizado
+    this.predioService.guardarPredioActual(predioActual);
   }
 }

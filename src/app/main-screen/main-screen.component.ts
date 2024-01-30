@@ -5,6 +5,7 @@ import {ApiService} from "../services/ApiService";
 import {Preferences} from "@capacitor/preferences";
 import { MatSnackBar } from '@angular/material/snack-bar';
 import {HttpErrorResponse} from "@angular/common/http";
+import Swal from "sweetalert2";
 
 @Component({
   selector: 'app-main-screen',
@@ -13,6 +14,7 @@ import {HttpErrorResponse} from "@angular/common/http";
 })
 export class MainScreenComponent {
   prediosMedidos = 0;
+  prediosEnviados = 0;
 
   constructor(private predioService: PredioService, private router: Router, private apiService: ApiService,private snackBar: MatSnackBar) {}
 
@@ -20,42 +22,45 @@ export class MainScreenComponent {
     this.predioService.nuevoPredio();
 
     let predioActual = this.predioService.obtenerPredioActual();
-    predioActual.id = this.predioService.getListaPredios().length +1
+    console.log("predio sin aumentar id: ",predioActual);
+    predioActual.id = this.predioService.getListaPredios().length +1;
+    console.log("predio aumentando id: ",predioActual);
 
     this.router.navigate(['/nuevo-predio', predioActual.id])
     console.log(predioActual)
   }
   ngOnInit() {
     this.prediosMedidos = this.predioService.getListaPredios().length;
-
+    this.prediosEnviados = this.predioService.getPrediosEnviados();
   }
 
   borrarTodo() {
-    Preferences.clear().then(() => {
-      this.snackBar.open('Todas las preferencias han sido borradas', 'Cerrar', { duration: 3000 });
-    }).catch(error => {
-      console.error('Error al borrar las preferencias:', error);
-      this.snackBar.open('Error al borrar las preferencias: ' + error, 'Cerrar', { duration: 3000 });
-    });
-    window.location.reload();
-  }
-
-  async enviarAlServidor() {
-    try {
-      const respuesta = await this.apiService.enviarDatosAPI();
-      this.snackBar.open('Datos enviados con éxito al servidor', 'Cerrar', { duration: 3000 });
-    } catch (error) {
-      let mensajeError: string;
-
-      if (error instanceof HttpErrorResponse) {
-        mensajeError = `Error ${error.status}: ${error.statusText}`;
-      } else if (error instanceof Error) {
-        mensajeError = error.message;
-      } else {
-        mensajeError = 'Error desconocido al enviar datos al servidor';
+    Swal.fire({
+      title: 'Confirmación',
+      text: "¿Está seguro de que desea borrar todos los datos no esenciales?",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, borrar',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Preferences.keys().then(keys => {
+          keys.keys.forEach(key => {
+            if (key !== 'authToken' && key !== 'user' && key !== 'password') {
+              Preferences.remove({ key: key });
+            }
+          });
+          this.snackBar.open('Preferencias no esenciales borradas', 'Cerrar', { duration: 3000, verticalPosition: "top" });
+        }).catch(error => {
+          console.error('Error al borrar preferencias:', error);
+          this.snackBar.open('Error al borrar preferencias: ' + error, 'Cerrar', { duration: 3000, verticalPosition: "top" });
+        });
+        window.location.reload();
       }
-
-      this.snackBar.open(mensajeError, 'Cerrar', { duration: 5000 });
-    }
+    });
   }
+
+
 }

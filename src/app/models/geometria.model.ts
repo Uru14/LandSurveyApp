@@ -3,16 +3,18 @@ export class Coordenadas{
   y: number
   precisionX: number
   precisionY: number
-  num?: number
-  cod?: String
+  num: number
+  cod: string
+  origen: string
 
-  constructor(x: number, y: number, precisionX: number, precisionY: number, num: number = 0, cod: String = '--') {
+  constructor(x: number, y: number, precisionX: number, precisionY: number, num: number = 0, cod: string = '--', origen: string) {
     this.x = x;
     this.y = y;
     this.precisionX = precisionX;
     this.precisionY = precisionY;
-    if (typeof num !== 'undefined') {this.num = num};
-    if (typeof cod !== 'undefined') {this.cod = cod};
+    this.num = num;
+    this.cod = cod;
+    this.origen = origen;
   }
 
 }

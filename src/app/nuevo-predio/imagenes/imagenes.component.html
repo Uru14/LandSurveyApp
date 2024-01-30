@@ -5,7 +5,7 @@
   </p>
   <div class="list">
     @for (imagen of imagenes; let i = $index; track imagen.tipo_doc) {
-      <div class="list-item" (click)="editarImagen(i)">{{i}} - {{imagen.tipo_doc}}</div>
+      <div class="list-item" (click)="editarImagen(i)">{{i + 1}} - {{imagen.tipo_doc}}</div>
     }
   </div>
 

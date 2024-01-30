@@ -13,6 +13,8 @@ import {PropietarioService} from "./services/PropietarioService";
 import {EditarPredioComponent} from "./editar-predio/editar-predio.component";
 import {MedirGpsComponent} from "./nuevo-predio/medir-gps/medir-gps.component";
 import {MatButtonModule} from "@angular/material/button";
+import {NetStatusService} from "./services/net-status.service";
+import {JWTTokenService} from "./services/jwtTokenService";
 
 @NgModule({
     declarations: [
@@ -33,7 +35,7 @@ import {MatButtonModule} from "@angular/material/button";
         HttpClientModule,
         MatButtonModule,
     ],
-    providers: [PropietarioService],
+    providers: [PropietarioService, NetStatusService, JWTTokenService],
     exports: [
         MapaComponent
     ],

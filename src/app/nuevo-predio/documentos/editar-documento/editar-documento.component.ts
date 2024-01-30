@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
 import {MatOptionModule} from "@angular/material/core";
@@ -32,6 +32,8 @@ export class EditarDocumentoComponent {
   array_tipo_doc = Object.values(DocTypeEnum);
   notas = '';
   tipo_doc = DocTypeEnum.DNI;
+  listaImagenes: { id: number; ruta: string }[] = [];
+  documentoForm: FormGroup;
   documento: Documento = {
     id: 0,
     tipo_doc: DocTypeEnum.DNI,
@@ -43,6 +45,12 @@ export class EditarDocumentoComponent {
   documentoIndex = -1;
 
   constructor(private documentoService: DocumentoService, private snackBar: MatSnackBar, private route: ActivatedRoute, private predioService: PredioService, private router: Router, private imagenService: ImagenService) {
+    this.documentoForm = new FormGroup({
+      tipo_doc: new FormControl(DocTypeEnum.Declaracion, Validators.required),
+      notas: new FormControl(''),
+      imagenes: new FormControl([]),
+      pdfs: new FormControl([])
+    });
   }
 
   ngOnInit() {
@@ -52,9 +60,12 @@ export class EditarDocumentoComponent {
         this.documentoIndex = parseInt(indexParam, 10);
         let docEncontrado = this.predioActual.documentos[this.documentoIndex];
         if (docEncontrado) {
-          this.documento = {...docEncontrado};
-          this.documento.imagenes = this.documento.imagenes || [];
-          this.documento.pdfs = this.documento.pdfs || [];
+          this.documentoForm.patchValue({
+            tipo_doc: docEncontrado.tipo_doc,
+            notas: docEncontrado.notas,
+            imagenes: docEncontrado.imagenes,
+            pdfs: docEncontrado.pdfs
+          });
         }
       }
     });
@@ -104,6 +115,20 @@ export class EditarDocumentoComponent {
       this.documento.pdfs.splice(index, 1);
       this.snackBar.open('PDF eliminado con éxito', 'Cerrar', { duration: 3000 });
     }
+  }
+
+  takePhoto() {
+    this.imagenService.addNewToGallery().then((capturedPhoto) => {
+      if (capturedPhoto.webPath) {
+        this.listaImagenes.push({
+          id: Date.now(), // Un identificador único para cada imagen
+          ruta: capturedPhoto.webPath
+        });
+
+      } else {
+        console.error('No se pudo capturar la foto.');
+      }
+    });
   }
 
 }

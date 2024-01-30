@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { DatosPredio } from '../models/datosPredio.model';
 import { Preferences } from '@capacitor/preferences';
+import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
+
 
 @Injectable({
   providedIn: 'root',
@@ -8,7 +10,8 @@ import { Preferences } from '@capacitor/preferences';
 export class DatosPredioService {
   private datosPredio: DatosPredio | null = null;
   private readonly PREFERENCES_KEY = 'datosPredio';
-
+  private readonly FOLDER_NAME = 'MetaTierras';
+  private readonly FILE_NAME = 'datosPredio.json';
   constructor() {
     this.cargarDatosPredio();
   }
@@ -33,8 +36,7 @@ export class DatosPredioService {
       });
     }
   }
-
-  getDatosPredio(): DatosPredio | null {
+  getDatosPredio(): DatosPredio | null{
     return this.datosPredio;
   }
 }

@@ -103,8 +103,12 @@ export class DatosPredioComponent {
       this.predioActual = predioEncontrado;
     }
 
-    if (this.predioActual && this.predioActual.datosPredio) {
-      this.inicializarFormularioConDatos(this.predioActual.datosPredio);
+    if (this.predioActual) {
+      if (this.predioActual.datosPredio) {
+        this.inicializarFormularioConDatos(this.predioActual.datosPredio);
+      } else {
+        console.error('Predio no encontrado con ID:', predioId);
+      }
     } else {
       console.error('Predio no encontrado con ID:', predioId);
     }

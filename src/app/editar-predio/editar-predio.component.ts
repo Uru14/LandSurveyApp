@@ -9,6 +9,7 @@ import {click} from "ol/events/condition";
 import Polygon from "ol/geom/Polygon";
 import { Router } from '@angular/router';
 import {Coordenadas} from "../models/geometria.model";
+import Swal from "sweetalert2";
 
 
 @Component({
@@ -26,7 +27,7 @@ export class EditarPredioComponent implements OnInit{
 
 
   ngOnInit(): void {
-    mapDraw.clearVectorLayer();
+    mapDraw.clearVectorLayerDigital();
     this.route.params.subscribe(params => {
       const predioId = +params['id'];
       this.cargarPredio(predioId);
@@ -194,8 +195,23 @@ export class EditarPredioComponent implements OnInit{
   }
 
   borrar() {
-    this.predioService.borrarPredioActual();
-    this.router.navigate(['/editar-predio-lista']);
+    Swal.fire({
+      title: 'Confirmación',
+      text: "¿Está seguro de que desea borrar el predio actual?",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, borrar',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.predioService.borrarPredioActual();
+        this.router.navigate(['/editar-predio-lista']);
+      }
+    });
   }
+
+
 
 }

@@ -1,1 +1,21 @@
+<div class="header">
+  <div class="header-content">
+    <h1 id="internet">Ayuda a la captura de datos de campo en Colombia</h1>
+    @if (netStatusService.available){
+      Internet Ok
+    } @else {
+      Sin internet
+    }
+    @if (tokenService.isTokenExpired()){
+      Autenticación no válida
+    } @else {
+      Autenticación válida
+    }
+
+  </div>
+</div>
 <router-outlet></router-outlet>
+
+<footer>
+  <p>FOOTER</p>
+</footer>

@@ -38,7 +38,6 @@ export class EditarImagenComponent {
   imagenCapturada: string | undefined = '';
   imagen: Imagen = {
     tipo_doc: LC_FuenteAdministrativaTipo.Imagen_propietario,
-    num_pag: 0,
     notas: '',
     imageData: ''
   }

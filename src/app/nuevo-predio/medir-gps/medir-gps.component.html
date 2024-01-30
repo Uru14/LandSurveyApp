@@ -7,7 +7,7 @@
 
   <div class="list">
     <p class="list-item">Puntos medidos: {{ puntosMedidos }}</p>
-    <p class="list-item">Precisión del último punto: {{ ultimaPrecision }} metros</p>
+    <p class="list-item">Precisión del último punto: {{ precisiones.length > 0 ? precisiones[precisiones.length - 1] : 0 }} metros</p>
   </div>
 
   <div class="button-container">

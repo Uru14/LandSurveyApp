@@ -16,13 +16,11 @@ export enum LC_FuenteAdministrativaTipo {
 }
 export class Imagen {
   tipo_doc : LC_FuenteAdministrativaTipo
-  num_pag: number
   notas: string
   imageData: string | undefined //base64 de la imagen
 
-  constructor(tipo_doc: LC_FuenteAdministrativaTipo, num_pag: number, notas: string, imageData: string) {
+  constructor(tipo_doc: LC_FuenteAdministrativaTipo, notas: string, imageData: string) {
     this.tipo_doc = tipo_doc
-    this.num_pag = num_pag
     this.notas = notas
     this.imageData = imageData
   }

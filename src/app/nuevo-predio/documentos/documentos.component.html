@@ -5,7 +5,7 @@
   </p>
   <div class="list">
     @for (documento of documentos; let i = $index; track documento.tipo_doc) {
-      <div class="list-item" (click)="editarDocumento(i)">{{i}} - {{documento.tipo_doc}}</div>
+      <div class="list-item" (click)="editarDocumento(i)">{{i + 1 }} - {{documento.tipo_doc}}</div>
     }
   </div>
 

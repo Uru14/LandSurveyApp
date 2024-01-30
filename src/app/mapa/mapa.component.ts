@@ -28,7 +28,6 @@ export class MapaComponent implements OnInit {
 
   ngOnInit(): void {
     this.inicializarMapa();
-    this.escucharCambiosSrc();
     mapDraw.addDrawPolygonInteraction();
     mapDraw.addDrawPointInteraction();
     mapDraw.addDrawLineInteraction();
@@ -43,25 +42,24 @@ export class MapaComponent implements OnInit {
     });
     proj.addProjection(epsg25830);*/
 
-    var vector_draw_style = new Style({
-      fill: new Fill({
-        color:'#D7DF01'
-      }),
-      stroke: new Stroke({
-        color: '#DF013A',
-        width: 3,
-        lineJoin: 'round'
-      }),
-      image: new Circle({
-        radius: 4,
-        fill: new Fill({
-          color: '#DF013A'
-        })
-      })
-    })
+    var vectorDigitalStyle = new Style({
+      fill: new Fill({ color: 'blue' }), // Cambia los colores según tu preferencia
+      stroke: new Stroke({ color: 'green', width: 3, lineJoin: 'round' }),
+      image: new Circle({ radius: 4, fill: new Fill({ color: 'green' }) })
+    });
 
-    CONFIG_OPENLAYERS.VECTOR_DRAW.setStyle(vector_draw_style);
-    CONFIG_OPENLAYERS.VECTOR_DRAW.setOpacity(0.5);
+    var vectorGpsStyle = new Style({
+      fill: new Fill({ color: '#D7DF01' }),
+      stroke: new Stroke({ color: '#DF013A', width: 3, lineJoin: 'round' }),
+      image: new Circle({ radius: 4, fill: new Fill({ color: '#DF013A' }) })
+    });
+
+    CONFIG_OPENLAYERS.VECTOR_DRAW_GPS.setStyle(vectorGpsStyle);
+    CONFIG_OPENLAYERS.VECTOR_DRAW_GPS.setOpacity(0.5);
+    CONFIG_OPENLAYERS.VECTOR_DRAW_DIGITAL.setStyle(vectorDigitalStyle);
+    CONFIG_OPENLAYERS.VECTOR_DRAW_DIGITAL.setOpacity(0.5);
+    /*CONFIG_OPENLAYERS.VECTOR_DRAW.setStyle(vector_draw_style);
+    CONFIG_OPENLAYERS.VECTOR_DRAW.setOpacity(0.5);*/
 
     var layer_PNOA = new TileLayer({
       source: new TileWMS({
@@ -75,7 +73,7 @@ export class MapaComponent implements OnInit {
 
     CONFIG_OPENLAYERS.MAP = new Map({
       target: 'map',
-      layers: [layer_OSM,CONFIG_OPENLAYERS.VECTOR_DRAW],
+      layers: [layer_OSM,CONFIG_OPENLAYERS.VECTOR_DRAW_DIGITAL, CONFIG_OPENLAYERS.VECTOR_DRAW_GPS],
       view: new View({
         projection: 'EPSG:4326',
         center: [-4,40],
@@ -92,19 +90,5 @@ export class MapaComponent implements OnInit {
 
   }
 
-  escucharCambiosSrc() {
-    const currentView = CONFIG_OPENLAYERS.MAP.getView();
-    const currentProjection = currentView.getProjection().getCode();
-
-    // Imprime la proyección actual antes del cambio
-    console.log('Proyección actual:', currentProjection);
-    this.dataService.src$.subscribe(newSrc => {
-      const currentView = CONFIG_OPENLAYERS.MAP.getView();
-      const newView = this.dataService.getUpdatedView(currentView, newSrc);
-      CONFIG_OPENLAYERS.MAP.setView(newView);
-      const newProjection = CONFIG_OPENLAYERS.MAP.getView().getProjection().getCode();
-      console.log('Nueva proyección:', newProjection);
-    });
-  }
 }
 

@@ -1,10 +1,6 @@
 import { Component } from '@angular/core';
-import {AppModule} from "../../app.module";
-import {MatMenuModule} from "@angular/material/menu";
-import {RouterLink} from "@angular/router";
 import {mapDraw} from "../../mapa/mapDraw";
 import {GeolocationService} from "../../services/Geolocation.service";
-import {map} from "rxjs";
 import {CONFIG_OPENLAYERS} from "../../configuracion-openlayers";
 import {PredioService} from "../../services/PredioService";
 import {GeometriasService} from "../../services/GeometriasService";
@@ -12,6 +8,7 @@ import {ImagenService} from "../../services/ImagenService";
 import {Imagen, LC_FuenteAdministrativaTipo} from "../../models/imagen.model";
 import {Coordenadas} from "../../models/geometria.model";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import Swal from "sweetalert2";
 
 @Component({
   selector: 'app-medir-gps',
@@ -23,9 +20,9 @@ export class MedirGpsComponent {
   protected readonly mapDraw = mapDraw;
   puntosMedidos: number = 0;
   imagenCapturada: string | undefined = '';
-  ultimaPrecision: number = 0;
+  precisiones: number[] = [];
 
-  constructor(private geolocationService: GeolocationService, private geometriasService: GeometriasService,
+  constructor(private geolocationService: GeolocationService, private geometriaService: GeometriasService,
               private predioService: PredioService, private imagenService: ImagenService, private snackBar: MatSnackBar) {}
 
   ngAfterViewInit(): void {
@@ -33,13 +30,26 @@ export class MedirGpsComponent {
 
     // Verifica si hay geometrías existentes
     if (predioActual && predioActual.geometrias.length > 0) {
-      if (window.confirm("Hay geometrías dibujadas para este predio. ¿Desea eliminarlas?")) {
-        this.geometriasService.limpiarGeometrias();
-        predioActual.geometrias = [];
-        mapDraw.clearVectorLayer(); // Limpia solo si el usuario confirma que quiere eliminarlas
-      }
+      Swal.fire({
+        title: 'Confirmación',
+        text: "Hay geometrías dibujadas para este predio. ¿Desea eliminarlas?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sí',
+        cancelButtonText: 'No'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.geometriaService.limpiarGeometrias();
+          predioActual.geometrias = [];
+          mapDraw.clearVectorLayerDigital();
+          mapDraw.clearVectorLayerGPS();
+        }
+      });
     } else {
-      mapDraw.clearVectorLayer();
+      mapDraw.clearVectorLayerDigital();
+      mapDraw.clearVectorLayerGPS();
     }
     // Espera a que el mapa esté listo antes de deshabilitar las interacciones de dibujo
     if (CONFIG_OPENLAYERS.MAP) {
@@ -59,16 +69,6 @@ export class MedirGpsComponent {
     });
   }
 
-  /*medirPunto() {
-    this.geolocationService.getCurrentCoordinates().then(position => {
-      mapDraw.addPoint([position.coords.longitude, position.coords.latitude]);
-      this.puntosMedidos++;
-    }).catch(error => {
-      console.error('Error al obtener la posición actual:', error);
-      alert(`Error al obtener la ubicación: ${error.message}`);
-    });
-  }*/
-
   medirPunto() {
     this.geolocationService.getCurrentCoordinates().then(position => {
       // Extrae y limita la precisión a 4 decimales
@@ -83,15 +83,17 @@ export class MedirGpsComponent {
         position.coords.longitude,
         position.coords.latitude,
         precisionX,
-        precisionY
+        precisionY,
+        0,
+        '--',
+        'GPS'
       );
 
       // Agrega la coordenada al servicio de geometrías
-      this.geometriasService.agregarGeometria([coordenada]);
+      this.geometriaService.agregarGeometria([coordenada]);
 
       // Actualiza la precisión para mostrarla en la interfaz de usuario
-      this.ultimaPrecision = precisionX;
-
+      this.precisiones.push(precisionX);
       this.puntosMedidos++;
     }).catch(error => {
       console.error('Error al obtener la posición actual:', error);
@@ -105,14 +107,15 @@ export class MedirGpsComponent {
     if (this.puntosMedidos > 0) {
       mapDraw.removeLastPoint();
       this.puntosMedidos--;
+      this.precisiones.pop();
     } else {
-      this.snackBar.open('No hay puntos para borrar', 'Cerrar', { duration: 3000 });
+      this.snackBar.open('No hay puntos para borrar', 'Cerrar', { duration: 3000, verticalPosition: "top" });
     }
   }
 
 
   finalizarMedicion() {
-    mapDraw.finishPolygon(this.geometriasService, this.predioService);
+    mapDraw.finishPolygon(this.geometriaService, this.predioService);
   }
 
   takePhoto() {
@@ -122,7 +125,6 @@ export class MedirGpsComponent {
 
       const nuevaImagen: Imagen = {
         tipo_doc: LC_FuenteAdministrativaTipo.Imagen_propietario,
-        num_pag: 0,
         notas: '',
         imageData: this.imagenCapturada
       };

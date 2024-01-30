@@ -69,6 +69,7 @@ export class SeleccionarGeometriaComponent {
               0,
               0,
               0,
+              '',
               ''
             ));
           });

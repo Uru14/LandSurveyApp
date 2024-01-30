@@ -32,14 +32,12 @@ export class AddImagenComponent {
   tipo_doc: LC_FuenteAdministrativaTipo;
   array_tipo_doc = Object.values(LC_FuenteAdministrativaTipo);
   notas = '';
-  num_pag = 0;
   imagen?: Imagen;
   imagenCapturada: string | undefined = '';
   predioActual = this.predioService.obtenerPredioActual();
   constructor(private imagenService: ImagenService, private predioService: PredioService, private router: Router, private snackBar: MatSnackBar) {
     this.tipo_doc = LC_FuenteAdministrativaTipo.Imagen_propietario;
     this.notas = '';
-    this.num_pag = 0;
   }
 
   takePhoto() {
@@ -52,7 +50,6 @@ export class AddImagenComponent {
   guardarImagen() {
     let nuevaImagen: Imagen = {
       tipo_doc: this.tipo_doc,
-      num_pag: this.num_pag,
       notas: this.notas,
       imageData: this.imagenCapturada || ''
     };
@@ -65,7 +62,6 @@ export class AddImagenComponent {
 
     this.tipo_doc = LC_FuenteAdministrativaTipo.Imagen_propietario;
     this.notas = '';
-    this.num_pag = 0;
     this.imagenCapturada = '';
     this.snackBar.open('Imagen guardada con éxito', 'Cerrar', { duration: 3000 });
     this.router.navigate(['/nuevo-predio/', this.predioActual.id, 'imagenes']);
