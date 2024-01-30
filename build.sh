@@ -1,4 +1,4 @@
-ng build --base-href=https://metatierrascol.upvusig.car.upv.es/app/
+ng build
 
 git add .
 git commit -m "build generado"

@@ -35,7 +35,7 @@ export class DataService {
   }
 
   // Método para obtener una nueva vista con la proyección actualizada
-  getUpdatedView(currentView: View, newProjectionCode: string): View {
+ /* getUpdatedView(currentView: View, newProjectionCode: string): View {
     let currentCenter = currentView.getCenter();
     // Proporcionar un centro por defecto si no hay uno definido
     if (!currentCenter) {
@@ -51,6 +51,6 @@ export class DataService {
       zoom: currentView.getZoom(),
       rotation: currentView.getRotation(),
     });
-  }
+  }*/
 
 }
